@@ -186,7 +186,7 @@ GameObject:
   - component: {fileID: 1253137109}
   - component: {fileID: 1253137108}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Fence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -419,7 +419,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Building: {fileID: 0}
-  m_Walls: []
+  m_Walls:
+  - {fileID: 1253137106}
   m_Fences: []
   m_FeedingPosts:
   - {fileID: 1056492431}
