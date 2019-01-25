@@ -38,8 +38,8 @@ public class BabyModel : HomeObject
     float m_StomachBuffer = 0f; // cow eats first to buffer, then when either buffer full or eating interrupted, 
                                 // buffer is moved to stomach
     float m_WalkingSpeed = 1.3f;  // 
-    float m_TurningSpeed = 40f;  // 
-    float m_BabyHeight = -0.45f;     // Pivotpoint from ground
+    float m_TurningSpeed = 1.3f;  // 
+    float m_BabyHeight = 0.5f;     // Pivotpoint from ground
 
     // list of all the wounds the cow is suffering
     // :TODO: add healing/dying based on the wounds
@@ -600,105 +600,19 @@ public class BabyModel : HomeObject
         if (m_CurrentTarget.Equals(Vector3.negativeInfinity))
             m_CurrentTarget = m_CurrentPath.corners[m_NextPathStep];
 
-        //if (m_ContactObjects.Count > 0)
-        //{
-        //    if (IsBlocked(m_CurrentTarget))
-        //    {
-        //        // Push and Bully action
-
-        //    }
-
-        //    return true;
-        //}
-
         // movement
-        // float step = m_WalkingSpeed * GameManager.m_Instance.m_GameDeltaTime;
-        // m_CowView.transform.position = Vector3.MoveTowards(m_CowView.transform.position, m_CurrentTarget, step);
+        float step = m_WalkingSpeed * GameManager.m_Instance.m_GameDeltaTime;
+        m_BabyView.transform.position = Vector3.MoveTowards(m_BabyView.transform.position, m_CurrentTarget, step);
 
-
-        
-            // Debug.Log("ID: " + id + ", m_Rigidbody.velocity: " + m_Rigidbody.velocity + "Target: " + m_Target);
-
-            // m_CowView.transform.position = Vector3.MoveTowards(m_CowView.transform.position, m_CurrentTarget, step);
-
-            //float step = m_WalkingSpeed * GameManager.m_Instance.m_GameDeltaTime;
-            //m_Rigidbody.MovePosition(m_CowView.transform.position - (m_CowView.transform.position - m_CurrentTarget).normalized * step);
-
-
+        // set rotation
         Vector3 target_dir = m_CurrentTarget - m_BabyView.transform.position;
-
-        float signed_angle = Vector3.SignedAngle(target_dir, m_BabyView.transform.forward, Vector3.down);
-
-        // Vector3 m_EulerAngleVelocity = new Vector3(0, 1, 0) * Mathf.Sign(signed_angle);
-        Vector3 m_EulerAngleVelocity = new Vector3(0, 1, 0);
-
-        // Vector3 new_dir = Vector3.RotateTowards(m_CowView.transform.forward, target_dir, m_TurningSpeed * GameManager.m_Instance.m_GameDeltaTime, 0f);
-
-        // Debug.Log("dir delta: " + (target_dir.normalized - m_CowView.transform.forward).magnitude);
-
-        if ((target_dir.normalized - m_BabyView.transform.forward).magnitude > 0.11f)
-        {
-            Vector3 euler_delta = m_EulerAngleVelocity.normalized * m_TurningSpeed * Time.deltaTime * Mathf.Sign(signed_angle);
-
-
-            float signed_angle2 = Vector3.SignedAngle(m_Rigidbody.velocity, m_BabyView.transform.forward, Vector3.down);
-
-            // Rotate velocity vector (around world up axis)
-            // m_Rigidbody.velocity = Quaternion.Euler(0, m_TurningSpeed * Time.deltaTime * Mathf.Sign(signed_angle), 0) * m_Rigidbody.velocity;
-
-            Debug.Log("Quaternion.Euler(0, signed_angle2, 0): " + Quaternion.Euler(0, signed_angle2, 0));
-
-            // m_Rigidbody.velocity = Quaternion.Euler(0, signed_angle2, 0) * m_Rigidbody.velocity;
-
-            // Vector3 velocity = m_Rigidbody.velocity;
-            // m_Rigidbody.velocity = Vector3.zero;
-            m_Rigidbody.velocity = m_BabyView.transform.forward * m_Rigidbody.velocity.magnitude;
-
-            // Rotate vector around its own up axis
-            // vector = Quaternion.AngleAxis(-45, Vector3.up) * vector;
-
-            Quaternion deltaRotation = Quaternion.Euler(euler_delta);
-
-            // m_Rigidbody.velocity = (m_Rigidbody.rotation * deltaRotation).eulerAngles;
-
-            // m_Rigidbody.rotation = Quaternion.SetLookRotation(velocity);
-
-            m_Rigidbody.MoveRotation(m_Rigidbody.rotation * deltaRotation);
-
-            
-
-            Vector3 new_dir = Vector3.RotateTowards(m_BabyView.transform.forward, m_Rigidbody.velocity, m_TurningSpeed * GameManager.m_Instance.m_GameDeltaTime, 0f);
-
-        }
-
-        // :BUG: note that after the turn the prevous force should be zeroed, otherwise we keep walking to wrong direction
-        if (m_Rigidbody.velocity.magnitude < m_WalkingSpeed)
-        {
-            // Debug.Log("WALKING");
-            // m_Rigidbody.AddForce(m_CurrentTarget.normalized * 1000f);
-            m_Rigidbody.AddForce(m_BabyView.transform.forward * 1000f);
-        }
-
-
-            //Vector3 target_dir = m_CurrentTarget - m_CowView.transform.position;
-            //Vector3 new_dir = Vector3.RotateTowards(m_CowView.transform.forward, target_dir, m_TurningSpeed * GameManager.m_Instance.m_GameDeltaTime, 0f);
-
-            //Debug.Log("m_CowView.transform.rotation: " + m_CowView.transform.rotation.eulerAngles + ", new_dir: " + new_dir + ", target_dir" + target_dir);
-
-            //// m_Rigidbody.MoveRotation(Quaternion.Euler(target_dir));
-
-            //m_Rigidbody.rotation = Quaternion.Euler(target_dir);
-
-
-        // rotation
-        //Vector3 target_dir = m_CurrentTarget - m_CowView.transform.position;
-        //Vector3 new_dir = Vector3.RotateTowards(m_CowView.transform.forward, target_dir, m_TurningSpeed * GameManager.m_Instance.m_GameDeltaTime, 0f);
-        //m_CowView.transform.rotation = Quaternion.LookRotation(new_dir);
+        Vector3 new_dir = Vector3.RotateTowards(m_BabyView.transform.forward, target_dir, m_TurningSpeed * GameManager.m_Instance.m_GameDeltaTime, 0f);
+        m_BabyView.transform.rotation = Quaternion.LookRotation(new_dir);
 
         float dist = MagnitudeXZ(m_BabyView.transform.position, m_CurrentTarget);
 
         // are we there yet? 
-        if (dist < 0.5) // || dist > m_PrevDist)
+        if (dist < 0.1) // || dist > m_PrevDist)
         {
             m_Rigidbody.velocity = Vector3.zero;
 
