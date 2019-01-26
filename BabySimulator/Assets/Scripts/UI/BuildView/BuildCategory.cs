@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class BuildCategory : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public List<GameObject> MyButtons = new List<GameObject>();
+    public MenuItemHolder MenuItemHolder;
 
-    // Update is called once per frame
-    void Update()
+    public void EnableMyButtons()
     {
-        
+        MenuItemHolder.HideItems();
+        MyButtons.ForEach(go => go.SetActive(true));
     }
+    
 }

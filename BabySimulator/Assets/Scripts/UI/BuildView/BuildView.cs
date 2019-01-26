@@ -3,30 +3,27 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildView : MonoBehaviour
+public class BuildView : MonoBehaviour, IView
 {
     public GameObject CategoryGO;
-    
-    List<BuildCategory> Categories = new List<BuildCategory>();
+    public MenuItemHolder menuItemHolder;
 
-    // Start is called before the first frame update
-    void Start()
+    public void EnableView()
     {
-        if(CategoryGO != null)
+        gameObject.SetActive(true);
+        menuItemHolder.HideItems();
+    }
+
+    public void BuildWall()
+    {
+
+    }
+
+    public void DisableView()
+    {
+       if(gameObject.activeSelf)
         {
-            Categories = CategoryGO.GetComponentsInChildren<BuildCategory>().ToList();
-            
+            gameObject.SetActive(false);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void CategoryClicked(BuildCategory caller)
-    {
-
     }
 }

@@ -1,18 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Actionbar : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public BuildView BuildView;
+
+    private bool buildViewEnabled = false;
+       
+
+    public void EnableBuildView()
     {
-        
+        if (buildViewEnabled)
+        {
+            DisableViews();
+            buildViewEnabled = false;
+        }
+            
+        else
+        {
+            DisableViews();
+            BuildView.EnableView();
+            buildViewEnabled = true;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void DisableViews()
     {
-        
+        //Disable every view here
+        BuildView.DisableView();
     }
 }
