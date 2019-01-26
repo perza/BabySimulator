@@ -267,6 +267,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 762943361065901882, guid: 62fddca74f358ed46aa12262034d8745,
+        type: 3}
+      propertyPath: m_Name
+      value: GUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 762943361065901882, guid: 62fddca74f358ed46aa12262034d8745,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 423131600529721709, guid: 62fddca74f358ed46aa12262034d8745,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -426,16 +436,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 762943361065901882, guid: 62fddca74f358ed46aa12262034d8745,
-        type: 3}
-      propertyPath: m_Name
-      value: GUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 762943361065901882, guid: 62fddca74f358ed46aa12262034d8745,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 762943361065901883, guid: 62fddca74f358ed46aa12262034d8745,
         type: 3}
