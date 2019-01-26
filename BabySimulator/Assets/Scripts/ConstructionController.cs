@@ -156,20 +156,17 @@ public class ConstructionController : Singleton<ConstructionController>
 
             if (Input.GetMouseButtonUp(0))
             {
-                if(!_constructedLocationsList.Exists(x => x.TileCoordinates == latestTilePosition))
+                var rotation = Quaternion.identity;
+                if (ghostObject != null)
                 {
-                    var rotation = Quaternion.identity;
-                    if (ghostObject != null)
+                    rotation = ghostObject.rotation;
+                    _constructedLocationsList.Add(new ConstructedLocations
                     {
-                        rotation = ghostObject.rotation;
-                        _constructedLocationsList.Add(new ConstructedLocations
-                        {
-                            TileCoordinates = latestTilePosition, TileGameObject = ghostObject.gameObject
-                        });
-                    }
-
-                    ghostObject = GetNewObject(objectToBuild, worldPosition, rotation);
+                        TileCoordinates = latestTilePosition, TileGameObject = ghostObject.gameObject
+                    });
                 }
+
+                ghostObject = GetNewObject(objectToBuild, worldPosition, rotation);
             }
             
             yield return null;
