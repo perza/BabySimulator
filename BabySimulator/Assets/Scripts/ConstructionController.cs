@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -155,13 +156,20 @@ public class ConstructionController : Singleton<ConstructionController>
 
             if (Input.GetMouseButtonUp(0))
             {
-                var rotation = Quaternion.identity;
-                if (ghostObject != null)
+                if(!_constructedLocationsList.Exists(x => x.TileCoordinates == latestTilePosition))
                 {
-                    rotation = ghostObject.rotation;
-                    _constructedLocationsList.Add(new ConstructedLocations{TileCoordinates = latestTilePosition, TileGameObject = ghostObject.gameObject});
+                    var rotation = Quaternion.identity;
+                    if (ghostObject != null)
+                    {
+                        rotation = ghostObject.rotation;
+                        _constructedLocationsList.Add(new ConstructedLocations
+                        {
+                            TileCoordinates = latestTilePosition, TileGameObject = ghostObject.gameObject
+                        });
+                    }
+
+                    ghostObject = GetNewObject(objectToBuild, worldPosition, rotation);
                 }
-                ghostObject = GetNewObject(objectToBuild, worldPosition, rotation);
             }
             
             yield return null;

@@ -299,7 +299,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Wall
+          m_StringArgument: wall_thin
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -973,37 +973,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConstructionController
       objectReference: {fileID: 0}
-    - target: {fileID: 4084249621730006614, guid: 087e2a1d1dcf74147bb9a6a665f52a2e,
-        type: 3}
-      propertyPath: EditorConstructables.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4084249621730006614, guid: 087e2a1d1dcf74147bb9a6a665f52a2e,
-        type: 3}
-      propertyPath: editorConstructables.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4084249621730006614, guid: 087e2a1d1dcf74147bb9a6a665f52a2e,
-        type: 3}
-      propertyPath: EditorConstructables.Array.data[1].Constructables
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4084249621730006614, guid: 087e2a1d1dcf74147bb9a6a665f52a2e,
-        type: 3}
-      propertyPath: EditorConstructables.Array.data[0].Prefab
-      value: 
-      objectReference: {fileID: 100002, guid: 88e8b322e3d07ca4cbce60cd557d12ed, type: 3}
-    - target: {fileID: 4084249621730006614, guid: 087e2a1d1dcf74147bb9a6a665f52a2e,
-        type: 3}
-      propertyPath: EraserPrefab
-      value: 
-      objectReference: {fileID: 4124985877692117820, guid: 5775ac2e4f237ca409da3713503f0eb8,
-        type: 3}
-    - target: {fileID: 4084249621730006614, guid: 087e2a1d1dcf74147bb9a6a665f52a2e,
-        type: 3}
-      propertyPath: editorConstructables.Array.data[0].Prefab
-      value: 
-      objectReference: {fileID: 100002, guid: 88e8b322e3d07ca4cbce60cd557d12ed, type: 3}
     - target: {fileID: 4084249621730006615, guid: 087e2a1d1dcf74147bb9a6a665f52a2e,
         type: 3}
       propertyPath: m_LocalPosition.x
