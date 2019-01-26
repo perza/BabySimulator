@@ -21,8 +21,31 @@ public class ConstructionController : Singleton<ConstructionController>
     
     public enum Constructables
     {
-        Wall,
-        Chair
+        env_door,
+        obj_armchair,
+        obj_bed_2x2,
+        obj_bin,
+        obj_care_table,
+        obj_chair,
+        obj_chair_antique,
+        obj_chair_normal,
+        obj_cradle,
+        obj_dishwasher,
+        obj_drawer,
+        obj_fridge,
+        obj_oven,
+        obj_plant,
+        obj_plant_cactus,
+        obj_plant_flower,
+        obj_pot,
+        obj_sink,
+        obj_stool,
+        obj_table_livingroom,
+        obj_toilet_seat,
+        obj_toilet_sink,
+        obj_tv_table,
+        wall_block,
+        wall_thin
     }
     
     public List<EditorConstructable> editorConstructables = new List<EditorConstructable>();
