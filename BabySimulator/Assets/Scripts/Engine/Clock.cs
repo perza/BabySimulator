@@ -9,6 +9,8 @@ internal class Clock : PersistentEngineSingleton<Clock>
 {
     double m_CurrentBarnTime; // time from simulation start in seconds
 
+    public float m_DayAcceleration = 24f;
+
     Date m_SimulationStartingDate;
     Date m_CurrentDate;
     public Date SimulationStartingDate { get { return m_SimulationStartingDate.Clone(); } }
@@ -103,7 +105,7 @@ internal class Clock : PersistentEngineSingleton<Clock>
 
     public void Update ()
     {
-        m_CurrentBarnTime += GameManager.m_Instance.m_GameDeltaTime;
+        m_CurrentBarnTime += GameManager.m_Instance.m_GameDeltaTime * m_DayAcceleration;
     }
 
     /// <summary>

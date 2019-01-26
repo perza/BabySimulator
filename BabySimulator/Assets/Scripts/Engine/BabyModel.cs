@@ -53,6 +53,14 @@ public class BabyModel : HomeObject
     int m_CowHierarchyPosition = 0; // cow position in herd hierarchy
     //:NOTE: CowManager holds list of all cows, and separate ref the herd leader
 
+
+    // List of action positions
+    public bool InFeedingChair = false;
+    public bool InBed = false;
+    public bool InDiaperChange = false;
+    public bool InLap = false;
+
+
     // :NOTE: keep these in priority order for inferencing
     public enum PrioritizedPrimaryAction
     {
@@ -696,6 +704,12 @@ public class BabyModel : HomeObject
 
         //:NOTE: that as the cow eats to buffer first, it can die to starvation while eating (if near starvation when starting to eat). 
         // This is kind of natural, as the food never affects immediately to a starving animal.
+
+
+        // Check that baby is positioned into feeding chair
+
+        if (!InFeedingChair)
+            return true;
 
         m_StomachBuffer += GameManager.m_Instance.m_GameDeltaTime / 1800f;
 

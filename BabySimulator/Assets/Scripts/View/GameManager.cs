@@ -11,8 +11,8 @@ using UnityEngine;
 /// </summary>
 public class GameManager : PersistentSceneSingleton<GameManager>
 {
-    BabyManager m_CowManager;
-    HomeManager m_BarnManager;
+    BabyManager m_BabyManager;
+    HomeManager m_HomeManager;
 
     public float m_GameDeltaTime;
 
@@ -21,20 +21,20 @@ public class GameManager : PersistentSceneSingleton<GameManager>
     // Start is called before the first frame update
     void Start()
     {
-        m_CowManager = new BabyManager ();
-        m_BarnManager = new HomeManager ();
+        m_BabyManager = new BabyManager ();
+        m_HomeManager = new HomeManager ();
 
         m_GameSpeed = 1f;
     }
 
     public BabyModel AddBaby (GameObject cow_view)
     {
-        return m_CowManager.AddBaby(cow_view);
+        return m_BabyManager.AddBaby(cow_view);
     }
 
     public FeedingPostModel AddFeedingPost(GameObject feed_post)
     {
-        return m_BarnManager.AddDynamicObject(feed_post);
+        return m_HomeManager.AddDynamicObject(feed_post);
     }
 
     // Update is called once per frame
@@ -42,7 +42,7 @@ public class GameManager : PersistentSceneSingleton<GameManager>
     {
         m_GameDeltaTime = Time.deltaTime * m_GameSpeed;
 
-        m_BarnManager.Update();
-        m_CowManager.Update();
+        m_HomeManager.Update();
+        m_BabyManager.Update();
     }
 }
