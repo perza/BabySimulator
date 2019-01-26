@@ -17,7 +17,7 @@ public class BabyManager : PersistentEngineSingleton<BabyManager>
     {
         m_Babies.Add(new BabyModel(baby_view));
 
-        baby_view.GetComponent<BabyView>().StartCoroutine (CleanBabyColliders(m_Babies[m_Babies.Count - 1]));
+        baby_view.GetComponent<HomeObjectView>().StartCoroutine (CleanBabyColliders(m_Babies[m_Babies.Count - 1]));
 
         return m_Babies[m_Babies.Count-1];
     }

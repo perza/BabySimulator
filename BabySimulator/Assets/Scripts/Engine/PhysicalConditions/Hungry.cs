@@ -33,8 +33,9 @@ public class Hungry : Condition
 
     public override void Update()
     {
-        if (0 == m_Cow.m_Stomach)
-            m_LatestValue += GameManager.m_Instance.m_GameDeltaTime;
+        // :NOTE: with conditions like hungry we need to consider day cycyle acceleratoion!!! 
+        if (0 == m_Baby.m_Stomach)
+            m_LatestValue += GameManager.m_Instance.m_GameDeltaTime * Clock.m_Instance.m_DayAcceleration;
 
         //:NOTE: The hungry cow eats to a buffer, so that it does not get not-hungry after the first mouthful!
 

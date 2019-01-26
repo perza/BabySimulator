@@ -7,7 +7,7 @@ public class FeedingPostModel : HomeObject
     GameObject m_FeedingPostView;
 
     // Start is called before the first frame update
-    public FeedingPostModel(GameObject feed_view)
+    public FeedingPostModel(GameObject feed_view) : base ("FeedingPost")
     {
         m_FeedingPostView = feed_view;
     }

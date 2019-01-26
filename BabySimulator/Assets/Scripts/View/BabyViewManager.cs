@@ -33,6 +33,6 @@ public class BabyViewManager : PersistentSceneSingleton<BabyViewManager>
         // instantiate a new cow model
         BabyModel baby_eng = GameManager.m_Instance.AddBaby(baby_view);
         // link the cow model with cow view
-        baby_view.GetComponent<BabyView>().Init(baby_eng);
+        baby_view.GetComponent<HomeObjectView>().Init(baby_eng);
     }
 }

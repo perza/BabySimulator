@@ -20,9 +20,9 @@ public class Wounded : Condition
     {
         m_LatestValue = 0;
 
-        for (int i=0; i< m_Cow.m_Wounds.Count; i++)
+        for (int i=0; i< m_Baby.m_Wounds.Count; i++)
         {
-            m_LatestValue += m_Cow.m_Wounds[i] * GameManager.m_Instance.m_GameDeltaTime;
+            m_LatestValue += m_Baby.m_Wounds[i] * GameManager.m_Instance.m_GameDeltaTime;
         }
 
         m_LatestValue = Mathf.Clamp(m_LatestValue, 0f, 1f);

@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public abstract class Condition
 {
-    protected BabyModel m_Cow;
+    protected BabyModel m_Baby;
     protected FuzzyMembership m_Condition = new FuzzyMembership();
     protected float m_LatestValue = 0f;
 
@@ -15,9 +15,9 @@ public abstract class Condition
     protected float m_MinimumTreshold = 0f;     // Return 0 if below a threshold
 
     // Start is called before the first frame update
-    public Condition(BabyModel cow)
+    public Condition(BabyModel baby)
     {
-        m_Cow = cow;
+        m_Baby = baby;
     }
 
     public void SetParams (int prio, float prio_enhance = 0f, float min_treshold = 0f)

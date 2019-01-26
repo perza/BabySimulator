@@ -8,8 +8,9 @@ using UnityEngine.AI;
 public class BabyModel : HomeObject
 {
     // m_CowView is used as location storage, needed for navigation and collisions
-    GameObject m_BabyView;
-    Rigidbody m_Rigidbody;
+    public GameObject m_BabyView;
+    public HomeObjectView m_HomeObjectView;
+    public Rigidbody m_Rigidbody;
 
     private Camera m_Camera;    // path finding
     private NavMeshPath m_CurrentPath;   // path finding
@@ -71,36 +72,12 @@ public class BabyModel : HomeObject
         EAT,
         SLEEP,
         EXPLORE,
+        PLAY,
         IDLE       // Lowest priority
     };
 
     PrioritizedPrimaryAction m_CurrentPrimaryAction = PrioritizedPrimaryAction.IDLE;
     float[] m_PrimaryActionValues;
-
-    public enum ConcreteAction
-    {
-        LYING,
-        STANDING,
-        TO_IDLING,          // Return to idling from any state. This means returning to LYING or STANDING, depending on the m_CurrentBasePose
-        WALKING,
-        RUNNING,
-        NAPPING,            // Sleeping while standing
-        DYING,
-        PUSHING,
-        PUSHED,
-        BULLYING,
-        STAGGERING,
-        SLEEPING,           // Sleeping while lying
-        STAND_UP,
-        LIE_DOWN,
-        TURN_LEFT,
-        TURN_RIGHT,
-        MOOING,
-        EATING,
-        DRINKING,
-        MILKING,
-        RUMINATING,
-    };
 
     ConcreteAction m_CurrentConcreteAction = ConcreteAction.STANDING;
 
@@ -115,7 +92,7 @@ public class BabyModel : HomeObject
     const float MAX_PRIO_BOOST = 0.5f;
 
     // Start is called before the first frame update
-    public BabyModel(GameObject cow_view)
+    public BabyModel(GameObject cow_view) :  base ("BabyModel")
     {
         m_CowHierarchyPosition = m_CowHierachyPositions;
         m_CowHierachyPositions++;
@@ -125,6 +102,7 @@ public class BabyModel : HomeObject
         m_BoostPerLevel = MAX_PRIO_BOOST / m_PrimaryActionValues.Length;
 
         m_BabyView = cow_view;
+        m_HomeObjectView = m_BabyView.GetComponent<HomeObjectView>();
         m_Rigidbody = m_BabyView.GetComponent<Rigidbody>();
 
         m_Camera = Camera.main;
@@ -135,23 +113,9 @@ public class BabyModel : HomeObject
         NotifyStateChangeObservers(ConcreteAction.STANDING);
 
         //:TEST:
-        m_Hungry.DEBUG_SetValue(2f * 3600f);
+        //m_Hungry.DEBUG_SetValue(2f * 3600f);
 
     }
-
-    // A cow view subscribes to cow model to follow the changes in actions
-    public event ActionChangeHandler mActionChange;
-    public delegate void ActionChangeHandler(ConcreteAction act, float val);
-
-    // Inform possible observers (view) of the new action state start
-    public void NotifyStateChangeObservers(ConcreteAction act, float val = 0)
-    {
-        if (null != mActionChange)
-            mActionChange.Invoke(act, val);
-    }
-
-    bool m_ActionInterrupted = false;
-    bool m_ActionChanged = false;
 
     // Update is called once per frame
     public new void Update()
@@ -246,10 +210,11 @@ public class BabyModel : HomeObject
 
         m_PrimaryActionValues[(int)PrioritizedPrimaryAction.ATTACK] = InferAttack();
         m_PrimaryActionValues[(int)PrioritizedPrimaryAction.DIE] = InferDie();
-        m_PrimaryActionValues[(int)PrioritizedPrimaryAction.DRINK] = Inferdrink();
+        m_PrimaryActionValues[(int)PrioritizedPrimaryAction.DRINK] = InferDrink();
         m_PrimaryActionValues[(int)PrioritizedPrimaryAction.EAT] = InferEat();
         m_PrimaryActionValues[(int)PrioritizedPrimaryAction.ESCAPE] = InferEscape();
         m_PrimaryActionValues[(int)PrioritizedPrimaryAction.EXPLORE] = InferExplore();
+        m_PrimaryActionValues[(int)PrioritizedPrimaryAction.PLAY] = InferPlay();
         m_PrimaryActionValues[(int)PrioritizedPrimaryAction.IDLE] = InferIdle();
         m_PrimaryActionValues[(int)PrioritizedPrimaryAction.SLEEP] = InferSleep();
 
@@ -294,6 +259,9 @@ public class BabyModel : HomeObject
                 break;
             case PrioritizedPrimaryAction.EXPLORE:
                 Explore();
+                break;
+            case PrioritizedPrimaryAction.PLAY:
+                Play();
                 break;
             case PrioritizedPrimaryAction.IDLE:
                 Idle();
@@ -501,28 +469,17 @@ public class BabyModel : HomeObject
     { }
 
     /// <summary>
-    ///     Description: Walk to the milking station, then proceed into milking, stand still while milked, then walk off the station.Cow seeks milking if it has enough milk in the udder, and (probably) when it is time for milking.Are there regular milking times?
-    ///     Triggers: Needs milking.
-    ///     Concrete actions: Walking, Milking, Pushing, Bullying
     /// </summary>
     public void Milk()
     { }
 
     /// <summary>
-    ///     Description: Search a nice place within the herd and start ruminating food while standing or lying
-    ///     Triggers: Needs ruminating .Assumption is that cow needs to start ruminating once its stomach has preprocessed the forage.
-    ///     Concrete actions: Walking, Standing/Lying, Ruminating
-    /// </summary>
-    public void Ruminate()
-    { }
-
-    /// <summary>
-    ///     Description: Bully another cow, human or other object. Maybe running or walking, depending on the attack target.
-    ///     Triggers: Angry.Note, Scared with no way to escape may convert to Angry, depending on the cow hierarchy.
-    ///     Concrete actions: Walking/Running, Bullying
     /// </summary>
     public void Attack()
-    { }
+    {
+        // fight over a toy
+
+    }
 
     /// <summary>
     ///     Description: Run away from the cause of fear.
@@ -532,13 +489,165 @@ public class BabyModel : HomeObject
     public void Escape()
     { }
 
+    enum ExplorePhase { GETPATH, MOVE, FINISH, CANCEL };
+    ExplorePhase m_ExplorePhase = ExplorePhase.GETPATH;
+
     /// <summary>
     ///      Description: Walk around studying place.
     ///      Triggers: Bored
     ///      Concrete actions: Walking
     /// </summary>
-    public void Explore()
-    { }
+    public bool Explore()
+    {
+
+    /// <summary>
+    ///     Description: Go to feeding place and eat
+    ///     Triggers: Hunger
+    ///     Concrete actions: StandUp, Walking, Eating, Pushing, Bullying
+    /// </summary>
+        // :NOTE: that actions over several frames must be cancellable
+        // :NOTE: always reset the action phase params both in completion and cancellation
+
+        if (CancelAction())
+        {
+            ResetCancel();
+            m_ExplorePhase = ExplorePhase.CANCEL;
+        }
+
+        // Throw exception if some phase gets into dead end
+        try
+        {
+            switch (m_ExplorePhase)
+            {
+                case ExplorePhase.CANCEL:
+                    throw new Exception("Eat canceled");
+
+                case ExplorePhase.GETPATH:
+                    // 1. Get path to a free feeding post
+                    // Select a free feeding post
+                    //      If no free feeding post, then select a feeding post with a lowest hierarchy cow
+                    //      If no feeding post with lower hierachy cow, select a feeding post with a higher hierarchy cow
+                    //      If still no feeding post, return false
+                    // If feeding post found, get path
+                    //      If no path (cow is blocked), return false
+
+
+                    // Generate random point within the game area.
+
+                    Vector3 low_left = new Vector3(0,0,0), high_top = new Vector3(0, 0, 0);
+
+                    HomeManager.m_Instance.GetBounds(ref low_left, ref high_top);
+
+                    float x = UnityEngine.Random.Range(low_left.x, high_top.x);
+                    float z = UnityEngine.Random.Range(low_left.z, high_top.z);
+                    float y = 0.5f;
+
+                    //List<FeedingPostModel> feed_posts = HomeManager.m_Instance.GetFeedingPosts();
+                    //if (feed_posts.Count == 0)
+                    //    return false;
+                    GetPath(new Vector3(x, y, z)); // feed_posts[0].GetPosition());
+
+                    // Debug.Log("GET PATH");
+                    //if (m_CurrentBasePose == CurrentBasePose.LYING)
+                    //{
+                    //    m_ExplorePhase = ExplorePhase.STAND_UP;
+                    //    m_CurrentConcreteAction = ConcreteAction.STAND_UP;
+                    //    // Debug.Log("START STAND_UP");
+                    //}
+                    //else
+                    //{
+                        m_ExplorePhase = ExplorePhase.MOVE;
+                        m_CurrentConcreteAction = ConcreteAction.WALKING;
+                        // Debug.Log("START WALKING");
+                    //}
+
+
+                    m_ActionChanged = true;
+
+                    break;
+                //case ExplorePhase.STAND_UP:
+                //    // 2. If lying, StandUp
+                //    if (!StandUp())
+                //    {
+                //        m_CurrentBasePose = CurrentBasePose.STANDING;
+                //        m_EatingPhase = EatingPhase.MOVE;
+                //        m_CurrentConcreteAction = ConcreteAction.WALKING;
+                //        m_ActionChanged = true;
+                //        // Debug.Log("START WALKING");
+                //    }
+
+                //    break;
+                case ExplorePhase.MOVE:
+                    // 3. Move to feeding post
+
+                    if (!Walking())
+                    {
+                        m_ExplorePhase = ExplorePhase.FINISH;
+                        m_CurrentConcreteAction = ConcreteAction.TO_IDLING;
+                        m_ActionChanged = true;
+                        // Debug.Log("START EATING");
+                    }
+
+                    break;
+                //case ExplorePhase.EAT:
+                //    // 4. Eat
+
+                //    if (!Eating())
+                //    {
+                //        m_EatingPhase = EatingPhase.FINISH;
+                //        m_CurrentConcreteAction = ConcreteAction.TO_IDLING;
+                //        m_ActionChanged = true;
+                //        // Debug.Log("START FINISH");
+                //    }
+
+                //    break;
+                case ExplorePhase.FINISH:
+                    // 5. Finish
+
+                    if (!ToIdling())
+                    {
+                        ResetHungry();
+
+                        m_ExplorePhase = ExplorePhase.GETPATH;
+                        m_CurrentPrimaryAction = PrioritizedPrimaryAction.IDLE;
+                        m_CurrentConcreteAction = ConcreteAction.STANDING;
+                        m_ActionChanged = true;
+
+                        // Debug.Log("FINISHED");
+                        return true;
+                    }
+
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            //Ensure that cow always ends up in a stable state, i.e. idling while standing or lying
+            m_ExplorePhase = ExplorePhase.FINISH;
+            m_CurrentConcreteAction = ConcreteAction.TO_IDLING;
+        }
+
+        // Debug.Log("EATING");
+
+        return false;
+    }
+
+
+    /// <summary>
+    ///      Description: Walk around studying place.
+    ///      Triggers: Bored
+    ///      Concrete actions: Walking
+    /// </summary>
+    public void Play()
+    {
+        // get list of toys from housemanager
+
+        // select closest free toy, go there and play
+
+        // if not free toys, select closest reserved toy and start fighting over it
+
+        // if no toys at all, start crying with toy bubble
+    }
 
     /// <summary>
     ///     Description: Cow seeks isolation from the herd
@@ -554,7 +663,9 @@ public class BabyModel : HomeObject
     ///     Concrete actions: Walking, Lying, Sleeping
     /// </summary>
     public void Sleep()
-    { }
+    {
+        // reduce tiredness to 0, then wake up in idle
+    }
 
     /// <summary>
     /// Description: Die by starvation, sickness or wound.
@@ -604,7 +715,6 @@ public class BabyModel : HomeObject
     float m_PrevDist = float.MaxValue;
     public bool Walking()
     {
-
         if (m_CurrentTarget.Equals(Vector3.negativeInfinity))
             m_CurrentTarget = m_CurrentPath.corners[m_NextPathStep];
 
@@ -732,12 +842,49 @@ public class BabyModel : HomeObject
 
     float InferAttack() { return 0f; }
     float InferDie() { return 0f; }
-    float Inferdrink() { return 0f; }
-    float InferEat() { return m_Hungry.GetState(); }
+    float InferDrink() { return 0f; }
+    float InferEat()
+    {
+        return m_Hungry.GetState();
+    }
     float InferEscape() { return 0f; }
-    float InferExplore() { return 0f; }
+    float InferExplore()
+    {
+        return 1f;
+
+        // If nothing to complain, choose a random location and move there
+        if (m_Happy.GetState() < 0.5f &&
+            m_Eager.GetState() < 0.5f &&
+            m_Hungry.GetState() < 0.25f &&
+            m_Lonely.GetState() < 0.05f &&
+            m_Pain.GetState() < 0.05f &&
+            m_Scared.GetState() < 0.05f &&
+            m_Sick.GetState() < 0.05f &&
+            m_Sleepy.GetState() < 0.05f &&
+            m_Thirsty.GetState() < 0.05f &&
+            m_Tired.GetState() < 0.05f)
+            return 1f;
+
+        return 0f;
+    }
     float InferIdle() { return 0f; }
     float InferSleep() { return 0f; }
+    float InferPlay()
+    {
+        if (m_Happy.GetState() > 0.5f &&
+            m_Eager.GetState() > 0.5f &&
+            m_Hungry.GetState() < 0.25f &&
+            m_Lonely.GetState() < 0.05f &&
+            m_Pain.GetState() < 0.05f &&
+            m_Scared.GetState() < 0.05f &&
+            m_Sick.GetState() < 0.05f &&
+            m_Sleepy.GetState() < 0.05f &&
+            m_Thirsty.GetState() < 0.05f &&
+            m_Tired.GetState() < 0.05f)
+            return 1f;
+
+        return 0f; }
+
 
     void GetPath(Vector3 target)
     {
