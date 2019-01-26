@@ -38,7 +38,7 @@ public class HomeObjectView : MonoBehaviour
         if (test && (test.m_HomeObjectModel.m_ObjectName.Equals("BabyModel") ||
                     test.m_HomeObjectModel.m_ObjectName.Equals("NannyModel")))
         {
-            Debug.Log("TRIGGER ENTER");
+            //Debug.Log("TRIGGER ENTER");
             m_ProximityObjects.Add(other.gameObject);
         }
 
@@ -52,7 +52,7 @@ public class HomeObjectView : MonoBehaviour
         if (test && (test.m_HomeObjectModel.m_ObjectName.Equals("BabyModel") ||
                     test.m_HomeObjectModel.m_ObjectName.Equals("NannyModel")))
         {
-            Debug.Log("TRIGGER EXIT");
+            //Debug.Log("TRIGGER EXIT");
             m_ProximityObjects.Remove(other.gameObject);
         }
 
