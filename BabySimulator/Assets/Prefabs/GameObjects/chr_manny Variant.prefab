@@ -27,8 +27,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &8986662064146977410
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38,7 +38,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100002, guid: bd9999ec738ad4e72ab26cec558c7684, type: 3}
       propertyPath: m_Name
-      value: chr_manny
+      value: chr_manny Variant
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: bd9999ec738ad4e72ab26cec558c7684, type: 3}
       propertyPath: m_LocalPosition.x
