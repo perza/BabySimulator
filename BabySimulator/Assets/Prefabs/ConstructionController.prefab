@@ -179,7 +179,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4084249621730006617}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.1395226, y: 76.57214, z: -23.396332}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4084249622344851697}
@@ -198,10 +198,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0761465015530b649a6476e264198cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  editorConstructables:
+  - Constructables: 0
+    Prefab: {fileID: 4842911488717700966, guid: 1cc0927503bb34908ac0eec540bbd990,
+      type: 3}
+  - Constructables: 1
+    Prefab: {fileID: 0}
+  - Constructables: 2
+    Prefab: {fileID: 4166694693073739396, guid: a2400c89b61184f708a689d6f0b22d47,
+      type: 3}
+  - Constructables: 3
+    Prefab: {fileID: 3358732717210553942, guid: 8bbbfd40ad14249bd908f1c6c57a3c27,
+      type: 3}
+  - Constructables: 4
+    Prefab: {fileID: 0}
+  - Constructables: 5
+    Prefab: {fileID: 1682232327492883728, guid: a723f18a87a9e46579ea03be0cfc1597,
+      type: 3}
+  - Constructables: 6
+    Prefab: {fileID: 689734160173251773, guid: 4aabd6d4aa32d407798fb36cea7e59ed, type: 3}
+  - Constructables: 7
+    Prefab: {fileID: 6108770216795424111, guid: 6ae53191c54dd44089de727e8a449323,
+      type: 3}
+  - Constructables: 8
+    Prefab: {fileID: 1117038262883082270, guid: d9e627a41e9df46fe98710de5554f077,
+      type: 3}
+  - Constructables: 9
+    Prefab: {fileID: 32980905668758065, guid: a6067a46634a5418d95c58a22dcce67a, type: 3}
+  - Constructables: 10
+    Prefab: {fileID: 221731144531005620, guid: 2904167734e234eecac3190f0e924027, type: 3}
+  - Constructables: 11
+    Prefab: {fileID: 6994867239827151485, guid: 7448551f8e2284e5c8a2e74673d5a3b7,
+      type: 3}
+  - Constructables: 12
+    Prefab: {fileID: 643941169114714940, guid: 34359aecb4d26403493640f3e9334abd, type: 3}
+  - Constructables: 13
+    Prefab: {fileID: 0}
+  - Constructables: 14
+    Prefab: {fileID: 2818529778934589568, guid: 6d415de9616c444f68efdae7a79ac9da,
+      type: 3}
+  - Constructables: 15
+    Prefab: {fileID: 8704732407087905682, guid: 18bba39fe241448a499c39346c731d75,
+      type: 3}
+  - Constructables: 16
+    Prefab: {fileID: 5227204556235496212, guid: de375a959b172486a95d11219c61e2e3,
+      type: 3}
+  - Constructables: 17
+    Prefab: {fileID: 6414755285209155978, guid: b9ec89d9b052c487185483da471a0831,
+      type: 3}
+  - Constructables: 18
+    Prefab: {fileID: 1658757820546863963, guid: bc0c14006cfbd4857977f39c10fb3414,
+      type: 3}
+  - Constructables: 19
+    Prefab: {fileID: 165600629544315763, guid: f7047f8ac53b04a29b0df4fcc4e5616a, type: 3}
+  - Constructables: 20
+    Prefab: {fileID: 7041205323594403994, guid: d72357b26610d49978cef604f3df0104,
+      type: 3}
+  - Constructables: 21
+    Prefab: {fileID: 5777724711607149306, guid: 78150c450cde14a01a8799aa6c793936,
+      type: 3}
+  - Constructables: 22
+    Prefab: {fileID: 5399043416733289161, guid: b3adf4e9895be4e77bff72333f449fbc,
+      type: 3}
+  - Constructables: 23
+    Prefab: {fileID: 4222496914493963333, guid: 2bd6205d48aae4df5930fdc154ccc0e0,
+      type: 3}
+  - Constructables: 24
+    Prefab: {fileID: 5900783454151823064, guid: c0517cee98fbd4d4b99c76dc44075acf,
+      type: 3}
   MyTilemap: {fileID: 4084249620948440649}
-  WallPrefab: {fileID: 5148588626761604956, guid: ce0b1f7cb6da8e04aad2353cdb75a515,
+  EraserPrefab: {fileID: 4124985877692117820, guid: 5775ac2e4f237ca409da3713503f0eb8,
     type: 3}
-  ChairPrefab: {fileID: 100002, guid: 88e8b322e3d07ca4cbce60cd557d12ed, type: 3}
 --- !u!1 &4084249622344851699
 GameObject:
   m_ObjectHideFlags: 0

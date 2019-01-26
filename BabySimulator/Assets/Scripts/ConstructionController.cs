@@ -76,7 +76,8 @@ public class ConstructionController : Singleton<ConstructionController>
     {
         foreach (var editorConstructable in editorConstructables)
         {
-            _constructablesDictionary.Add(editorConstructable.Constructables.ToString(), editorConstructable.Prefab);
+            if(editorConstructable.Prefab != null)
+                _constructablesDictionary.Add(editorConstructable.Constructables.ToString(), editorConstructable.Prefab);
         }
     }
 
