@@ -292,14 +292,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 382171560}
-        m_MethodName: StartBuildingWall
-        m_Mode: 1
+        m_MethodName: StartBuilding
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Wall
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -433,14 +433,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 382171560}
-        m_MethodName: StartBuildingChair
-        m_Mode: 1
+        m_MethodName: StartBuilding
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Chair
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -973,6 +973,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConstructionController
       objectReference: {fileID: 0}
+    - target: {fileID: 4084249621730006614, guid: 087e2a1d1dcf74147bb9a6a665f52a2e,
+        type: 3}
+      propertyPath: EditorConstructables.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4084249621730006614, guid: 087e2a1d1dcf74147bb9a6a665f52a2e,
+        type: 3}
+      propertyPath: EditorConstructables.Array.data[1].Constructables
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4084249621730006614, guid: 087e2a1d1dcf74147bb9a6a665f52a2e,
+        type: 3}
+      propertyPath: EditorConstructables.Array.data[0].Prefab
+      value: 
+      objectReference: {fileID: 100002, guid: 88e8b322e3d07ca4cbce60cd557d12ed, type: 3}
     - target: {fileID: 4084249621730006615, guid: 087e2a1d1dcf74147bb9a6a665f52a2e,
         type: 3}
       propertyPath: m_LocalPosition.x

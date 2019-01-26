@@ -1,33 +1,57 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class ConstructionController : Singleton<ConstructionController>
 {
+    [Serializable]
+    public class EditorConstructable
+    {
+        public Constructables Constructables;
+        public GameObject Prefab;
+    }
+    
+    public enum Constructables
+    {
+        Wall,
+        Chair
+    }
+    
+    public List<EditorConstructable> EditorConstructables = new List<EditorConstructable>();
+
+    private Dictionary<string, GameObject> _constructablesDictionary = new Dictionary<string, GameObject>();
+    
     public Tilemap MyTilemap;
     private Grid MyGrid;
     private Camera _myCamera;
-
-    public GameObject WallPrefab;
-    public GameObject ChairPrefab;
 
     // Start is called before the first frame update
     void Start()
     {
         MyGrid = MyTilemap.GetComponentInParent<Grid>();
         _myCamera = Camera.main;
+        InitialiseDictionary();
     }
 
-    // Update is called once per frame
-    // void Update()
-    // {
-    //     
-    // }
-
-    private void StartBuilding(GameObject objectToBuild)
+    private void InitialiseDictionary()
     {
-        StartCoroutine(BuildingModeLoop(objectToBuild));
+        foreach (var editorConstructables in EditorConstructables)
+        {
+            _constructablesDictionary.Add(editorConstructables.Constructables.ToString(), editorConstructables.Prefab);
+        }
+    }
+
+    public void StartBuilding(String constructableString)
+    {
+        if (_constructablesDictionary != null)
+        {
+            if(!_constructablesDictionary.ContainsKey(constructableString)) return;
+            var objectToBuild = _constructablesDictionary[constructableString];
+
+            StartCoroutine(BuildingModeLoop(objectToBuild));
+        }
     }
 
     private IEnumerator BuildingModeLoop(GameObject objectToBuild)
@@ -56,7 +80,7 @@ public class ConstructionController : Singleton<ConstructionController>
                 latestTilePosition = tilePosition;
                 worldPosition = MyTilemap.GetCellCenterWorld(tilePosition);
                 if(ghostWall == null)
-                    ghostWall = GetNewObject(objectToBuild, worldPosition);
+                    ghostWall = GetNewObject(objectToBuild, worldPosition, Quaternion.identity);
                 else
                     ghostWall.position = worldPosition;
             }
@@ -79,7 +103,10 @@ public class ConstructionController : Singleton<ConstructionController>
 
             if (Input.GetMouseButtonUp(0))
             {
-                ghostWall = GetNewObject(objectToBuild, worldPosition);
+                var rotation = Quaternion.identity;
+                if(ghostWall != null)
+                    rotation = ghostWall.rotation;
+                ghostWall = GetNewObject(objectToBuild, worldPosition, rotation);
             }
             
             yield return null;
@@ -88,17 +115,7 @@ public class ConstructionController : Singleton<ConstructionController>
         yield return null;
     }
 
-    private Transform GetNewObject(GameObject objectToBuild, Vector3 pos) => Instantiate(objectToBuild, pos, Quaternion.identity).transform;
-    
-    public void StartBuildingWall()
-    {
-        StartBuilding(WallPrefab);
-    }
-
-    public void StartBuildingChair()
-    {
-        StartBuilding(ChairPrefab);
-    }
+    private Transform GetNewObject(GameObject objectToBuild, Vector3 pos, Quaternion rotation) => Instantiate(objectToBuild, pos, rotation).transform;
     
     
 }
