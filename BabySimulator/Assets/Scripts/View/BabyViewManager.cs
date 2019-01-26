@@ -5,11 +5,11 @@ using UnityEngine;
 public class BabyViewManager : PersistentSceneSingleton<BabyViewManager>
 {
     public GameObject m_BabyPrefab;
+    public GameObject m_BabyFolder;
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     void Update()
@@ -21,8 +21,13 @@ public class BabyViewManager : PersistentSceneSingleton<BabyViewManager>
     {
         // Instantate a new cow view
         GameObject baby_view = Instantiate(m_BabyPrefab);
-        baby_view.name = "Cow";
-        baby_view.transform.parent = transform;
+        baby_view.name = "Baby";
+
+        // for some reason persistent object can not parent the instantiated objects
+        if (null == m_BabyFolder)
+            m_BabyFolder = GameObject.Find("Babies");
+
+        baby_view.transform.parent = m_BabyFolder.transform;
         baby_view.SetActive(true);
 
         // instantiate a new cow model
