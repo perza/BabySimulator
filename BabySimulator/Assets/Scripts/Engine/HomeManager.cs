@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ public class HomeManager : PersistentEngineSingleton<HomeManager>
     Clock m_BarnClock;
     // m_BarnClockEvents list of events that may be repeating, like feeding times
     List<ClockEvent> m_BarnClockEvents;
+
+    public float m_MinX = -100f, m_MaxX = 100f, m_MinY = 0.5f, m_MaxY = 0.5f, m_MinZ = -100f, m_MaxZ = 100f;
 
     // Start is called before the first frame update
     public HomeManager()
@@ -78,4 +81,11 @@ public class HomeManager : PersistentEngineSingleton<HomeManager>
         return m_FeedingPostModels;
     }
 
+    internal void GetBounds(ref Vector3 low_left, ref Vector3 high_top)
+    {
+        low_left.Set(m_MinX, m_MinY, m_MinZ);
+        high_top.Set(m_MaxX, m_MaxY, m_MaxZ);
+
+        return;
+    }
 }

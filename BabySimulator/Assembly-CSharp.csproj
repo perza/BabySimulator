@@ -100,11 +100,14 @@
     <Compile Include="Assets\Scripts\NavMeshComponents\Scripts\NavMeshModifierVolume.cs" />
     <Compile Include="Assets\Scripts\NavMeshComponents\Scripts\NavMeshSurface.cs" />
     <Compile Include="Assets\Scripts\UI\Actionbar.cs" />
+    <Compile Include="Assets\Scripts\UI\BuildView\BuildCategory.cs" />
+    <Compile Include="Assets\Scripts\UI\BuildView\BuildView.cs" />
     <Compile Include="Assets\Scripts\UI\GUIMain.cs" />
+    <Compile Include="Assets\Scripts\UI\MenuItemHolder.cs" />
     <Compile Include="Assets\Scripts\Utilities\SingletonGOBase.cs" />
-    <Compile Include="Assets\Scripts\View\BabyView.cs" />
     <Compile Include="Assets\Scripts\View\BabyViewManager.cs" />
     <Compile Include="Assets\Scripts\View\GameManager.cs" />
+    <Compile Include="Assets\Scripts\View\HomeObjectView.cs" />
     <Compile Include="Assets\Scripts\View\HomeViewManager.cs" />
     <Compile Include="Assets\unity-ui-extensions\Examples\ComboBox\ComboBoxChanged.cs" />
     <Compile Include="Assets\unity-ui-extensions\Examples\Cooldown\CooldownEffect_Image.cs" />

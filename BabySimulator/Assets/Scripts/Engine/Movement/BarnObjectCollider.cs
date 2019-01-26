@@ -13,7 +13,7 @@ public class BarnObjectCollider : MonoBehaviour
     {
         // m_Collider.name = "CowColliderInjury";
 
-        m_BarnObjectModel = gameObject.GetComponent<BabyView>().m_BabyModel;
+        m_BarnObjectModel = gameObject.GetComponent<HomeObjectView>().m_HomeObjectModel;
     }
 
     // Update is called once per frame
