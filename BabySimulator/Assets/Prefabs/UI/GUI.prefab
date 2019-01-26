@@ -2125,6 +2125,7 @@ MonoBehaviour:
   MyButtons:
   - {fileID: 7213939322491827975}
   - {fileID: 6673991054989584534}
+  - {fileID: 2388572800851591365}
   MenuItemHolder: {fileID: 7927929024649601285}
 --- !u!1 &3921697768171147148
 GameObject:
@@ -2989,7 +2990,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MyButtons:
   - {fileID: 3921697768171147148}
-  - {fileID: 2388572800851591365}
   MenuItemHolder: {fileID: 7927929024649601285}
 --- !u!1 &6040583000453424596
 GameObject:
