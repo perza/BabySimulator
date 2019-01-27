@@ -16,7 +16,9 @@ public class NannyModel : HomeObject
         m_TurningSpeed = 2.6f;
     }
 
-    enum Tasks { NONE, FEED, SLEEP, DIAPER, HUG, REMOVE }
+    enum Tasks { NONE, FEED, SLEEP, DIAPER, HUG, REMOVE,
+        IDLE
+    }
 
     Tasks m_CurrentTask = Tasks.NONE;
 
@@ -42,6 +44,10 @@ public class NannyModel : HomeObject
                 break;
             case Tasks.SLEEP:
                 break;
+            case Tasks.IDLE:
+                //:TODO: add here moving away from previous action post
+                m_CurrentTask = Tasks.NONE;
+                break;
             case Tasks.NONE:
 
                 if (BabyManager.m_Instance.m_Babies.Count == 0) return;
@@ -61,7 +67,7 @@ public class NannyModel : HomeObject
                     }
 
                     // Do not target a baby that is already handled by another nanny
-                    if (!baby.IsNannyTarget && !baby.IsCarried && (top_prio_baby == null || baby.m_Happy.GetState() < top_prio_baby.m_Happy.GetState()))
+                    if (!baby.IsNannyTarget && !baby.IsCarried && baby.m_Happy.GetState() < 0.5f && (top_prio_baby == null || baby.m_Happy.GetState() < top_prio_baby.m_Happy.GetState()))
                     {
                         top_prio_baby = baby;
                     }
@@ -100,7 +106,10 @@ public class NannyModel : HomeObject
                             m_TargetBaby.IsNannyTarget = false;
                             break;
                     }
-
+                }
+                else
+                {
+                    m_CurrentTask = Tasks.NONE;
                 }
                 break;
         }
@@ -215,7 +224,7 @@ public class NannyModel : HomeObject
                         ResetHungry();
 
                         m_FeedingPhase = FeedingPhase.GETPATH_BABY;
-                        m_CurrentTask = Tasks.NONE;
+                        m_CurrentTask = Tasks.IDLE;
                         m_CurrentConcreteAction = ConcreteAction.STANDING;
 
                         // m_ActionChanged = true;
