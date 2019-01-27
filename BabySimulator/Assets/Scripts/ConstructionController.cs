@@ -156,17 +156,23 @@ public class ConstructionController : Singleton<ConstructionController>
 
             if (Input.GetMouseButtonUp(0))
             {
-                var rotation = Quaternion.identity;
-                if (ghostObject != null)
+                var success =
+                    ResourceHandler.Instance.Purchase(objectToBuild.GetComponentInChildren<Consumable>().prize);
+                
+                if(success)
                 {
-                    rotation = ghostObject.rotation;
-                    _constructedLocationsList.Add(new ConstructedLocations
+                    var rotation = Quaternion.identity;
+                    if (ghostObject != null)
                     {
-                        TileCoordinates = latestTilePosition, TileGameObject = ghostObject.gameObject
-                    });
-                }
+                        rotation = ghostObject.rotation;
+                        _constructedLocationsList.Add(new ConstructedLocations
+                        {
+                            TileCoordinates = latestTilePosition, TileGameObject = ghostObject.gameObject
+                        });
+                    }
 
-                ghostObject = GetNewObject(objectToBuild, worldPosition, rotation);
+                    ghostObject = GetNewObject(objectToBuild, worldPosition, rotation);
+                }
             }
             
             yield return null;
@@ -236,6 +242,7 @@ public class ConstructionController : Singleton<ConstructionController>
 
         if (construct != null)
         {
+            ResourceHandler.Instance.GainMoney(construct.TileGameObject.GetComponentInChildren<Consumable>().prize / 2);
             Destroy(construct.TileGameObject);
             _constructedLocationsList.Remove(construct);
         }
