@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Resources;
 using UnityEngine;
 
 /// <summary>
@@ -17,6 +19,8 @@ public class GameManager : PersistentSceneSingleton<GameManager>
     public float m_GameDeltaTime;
 
     public float m_GameSpeed;
+
+    private int _earlierDate;
        
     // Start is called before the first frame update
     void Start()
@@ -25,6 +29,8 @@ public class GameManager : PersistentSceneSingleton<GameManager>
         m_HomeManager = new HomeManager ();
 
         m_GameSpeed = 1f;
+
+        _earlierDate = Clock.m_Instance.CurrentDate.m_Day;
     }
 
     public BabyModel AddBaby (GameObject cow_view)
@@ -49,5 +55,15 @@ public class GameManager : PersistentSceneSingleton<GameManager>
 
         m_HomeManager.Update();
         m_BabyManager.Update();
+        
+        CheckForIncome();
+    }
+
+    private void CheckForIncome()
+    {
+        if (_earlierDate == Clock.m_Instance.CurrentDate.m_Day) return;
+        var cash = 32 * m_BabyManager.m_Babies.Count;
+        ResourceHandler.Instance.GainMoney(cash);
+        _earlierDate = Clock.m_Instance.CurrentDate.m_Day;
     }
 }
