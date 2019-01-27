@@ -63,7 +63,7 @@ public class FeelingDisplay : MonoBehaviour
         imageTransform.position = followPoint;
     }
 
-    void DisplayMood(Feeling feeling) {
+    public void DisplayMood(Feeling feeling) {
 
         if (!imageDisplay.enabled)
         {
