@@ -53,6 +53,7 @@ public class FeelingDisplay : MonoBehaviour
         feelingDict.Add(Feeling.Shit, shitImg);
 
         imageDisplay.enabled = false;
+
     }
 
     // Update is called once per frame

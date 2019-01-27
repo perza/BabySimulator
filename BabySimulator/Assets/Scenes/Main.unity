@@ -1137,7 +1137,8 @@ PrefabInstance:
       propertyPath: m_BabyFolder
       value: 
       objectReference: {fileID: 1694476375}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 378303901, guid: 91fbdd6c7d8358845b42e88b2b5fc3fe, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 91fbdd6c7d8358845b42e88b2b5fc3fe, type: 3}
 --- !u!1001 &4667790795037311836
 PrefabInstance:
@@ -1211,7 +1212,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 23800000, guid: a1ec42550399f2942820b6faf9dfbd96,
         type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1451760433, guid: a74851a095a57184bbafe9d1fd2035f1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a74851a095a57184bbafe9d1fd2035f1, type: 3}
 --- !u!1001 &5934677263800338759
 PrefabInstance:

@@ -38,6 +38,9 @@ public class BabyModel : HomeObject
     public List<float> m_Wounds = new List<float>();
     float m_HealingSpeed = 0.01f;
 
+    float m_TimeToShoMood = 0;
+
+
     // cow constants
     const float DAILY_FORAGE = 20f; // kg
 
@@ -112,9 +115,15 @@ public class BabyModel : HomeObject
     float m_BoostPerLevel;
     const float MAX_PRIO_BOOST = 0.5f;
 
+    FeelingDisplay m_FeelingDisplay;
+
+
     // Start is called before the first frame update
     public BabyModel(GameObject baby_view) :  base (baby_view, "BabyModel")
     {
+
+        m_FeelingDisplay = m_HomeObjectView.gameObject.GetComponentInChildren<FeelingDisplay>();
+
         m_WalkingSpeed = 1.3f;
         m_TurningSpeed = 1.3f;
 
@@ -183,6 +192,45 @@ public class BabyModel : HomeObject
                 m_CurrentPrimaryAction = new_primary_action;
 
                 return;
+            }
+
+            m_TimeToShoMood += Time.deltaTime;
+
+            // show mood occasionally
+            if (m_TimeToShoMood > UnityEngine.Random.Range(10,60))
+            {
+                m_TimeToShoMood = 0;
+
+                switch (m_CurrentPrimaryAction)
+                {
+                    case PrioritizedPrimaryAction.DIAPER:
+                        m_FeelingDisplay.DisplayMood(Feeling.Shit);
+                        break;
+                    case PrioritizedPrimaryAction.ATTACK:
+                        m_FeelingDisplay.DisplayMood(Feeling.Angry);
+                        break;
+                    case PrioritizedPrimaryAction.DRINK:
+                        m_FeelingDisplay.DisplayMood(Feeling.Hungry);
+                        break;
+                    case PrioritizedPrimaryAction.EAT:
+                        m_FeelingDisplay.DisplayMood(Feeling.Hungry);
+                        break;
+                    case PrioritizedPrimaryAction.ESCAPE:
+                        m_FeelingDisplay.DisplayMood(Feeling.Cry);
+                        break;
+                    case PrioritizedPrimaryAction.EXPLORE:
+                        m_FeelingDisplay.DisplayMood(Feeling.Happy);
+                        break;
+                    case PrioritizedPrimaryAction.IDLE:
+                        m_FeelingDisplay.DisplayMood(Feeling.Happy);
+                        break;
+                    case PrioritizedPrimaryAction.PLAY:
+                        m_FeelingDisplay.DisplayMood(Feeling.Happy);
+                        break;
+                    case PrioritizedPrimaryAction.SLEEP:
+                        m_FeelingDisplay.DisplayMood(Feeling.Sleepy);
+                        break;
+                }
             }
 
             //:NOTE: the current action may be continuing from the previous frame, or starting from beginning.
@@ -391,22 +439,12 @@ public class BabyModel : HomeObject
                     List<FeedingPostModel> feed_posts = HomeManager.m_Instance.GetFeedingPosts();
                     if (feed_posts.Count == 0)
                         return false;
-                    GetPath(feed_posts[0].GetPosition());
 
-                    // Debug.Log("GET PATH");
-                    if (m_CurrentBasePose == CurrentBasePose.LYING)
-                    {
-                        m_EatingPhase = EatingPhase.STAND_UP;
-                        m_CurrentConcreteAction = ConcreteAction.STAND_UP;
-                        // Debug.Log("START STAND_UP");
-                    }
-                    else
-                    {
                         m_EatingPhase = EatingPhase.MOVE;
                         m_CurrentConcreteAction = ConcreteAction.WALKING;
-                        // Debug.Log("START WALKING");
-                    }
 
+                    GetPath(feed_posts[0].GetPosition());
+                    // SetTarget(feed_posts[0].GetPosition());
 
                     m_ActionChanged = true;
 
@@ -584,7 +622,10 @@ public class BabyModel : HomeObject
                     //List<FeedingPostModel> feed_posts = HomeManager.m_Instance.GetFeedingPosts();
                     //if (feed_posts.Count == 0)
                     //    return false;
+
                     GetPath(new Vector3(x, y, z)); // feed_posts[0].GetPosition());
+                    // SetTarget(new Vector3(x, y, z));
+
 
                     // Debug.Log("GET PATH");
                     //if (m_CurrentBasePose == CurrentBasePose.LYING)
@@ -595,7 +636,7 @@ public class BabyModel : HomeObject
                     //}
                     //else
                     //{
-                        m_ExplorePhase = ExplorePhase.MOVE;
+                    m_ExplorePhase = ExplorePhase.MOVE;
                         m_CurrentConcreteAction = ConcreteAction.WALKING;
                         // Debug.Log("START WALKING");
                     //}
@@ -835,14 +876,13 @@ public class BabyModel : HomeObject
     float InferDrink() { return 0f; }
     float InferEat()
     {
-        // return 1f;
+        return 1f;
 
         return m_Hungry.GetState();
     }
     float InferEscape() { return 0f; }
     float InferExplore()
     {
-        return 1f;
 
         // If nothing to complain, choose a random location and move there
         if (m_Happy.GetState() < 0.5f &&

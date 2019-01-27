@@ -46,11 +46,13 @@ public abstract class HomeObject
     protected float m_WalkingSpeed = 1.3f;  // 
     protected float m_TurningSpeed = 1.3f;  // 
 
-    Vector3 m_CurrentTarget = Vector3.negativeInfinity;
+    public Vector3 m_CurrentTarget = Vector3.negativeInfinity;
+
     int m_NextPathStep = 0;
     float m_PrevDist = float.MaxValue;
     public bool Walking(float stop_dist = 0.1f)
     {
+
         if (m_CurrentTarget.Equals(Vector3.negativeInfinity))
             m_CurrentTarget = m_CurrentPath.corners[m_NextPathStep];
 

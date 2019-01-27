@@ -519,6 +519,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19f62f89cb1c84709b80e5fb9dc3b0d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!195 &1451760433
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4667790794894493504}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!114 &3455020485568820119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -813,7 +835,8 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 60
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 58161340840858169, guid: efa37cce94823c347b05d4e4a871dda8, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: efa37cce94823c347b05d4e4a871dda8, type: 3}
 --- !u!1 &4667790794894493504 stripped
 GameObject:

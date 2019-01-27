@@ -47,7 +47,6 @@ public class NannyModel : HomeObject
             case Tasks.IDLE:
                 //:TODO: add here moving away from previous action post
                 NannyIdle();
-
                 break;
             case Tasks.NONE:
 
@@ -154,15 +153,14 @@ public class NannyModel : HomeObject
                     float z = UnityEngine.Random.Range(low_left.z, high_top.z);
                     float y = 0.5f;
 
-                    GetPath(new Vector3(x, y, z)); // feed_posts[0].GetPosition());
+                    GetPath(new Vector3(x, y, z));
+                    // SetTarget(new Vector3(x, y, z));
 
                     m_IdlePhasePhase = IdlePhase.MOVE;
                     m_CurrentConcreteAction = ConcreteAction.WALKING;
 
                     break;
                 case IdlePhase.MOVE:
-
-                    Walking();
 
                     m_TimeLapsed += GameManager.m_Instance.m_GameDeltaTime;
 
@@ -172,6 +170,8 @@ public class NannyModel : HomeObject
                         m_IdlePhasePhase = IdlePhase.FINISH;
                         m_CurrentConcreteAction = ConcreteAction.WALKING;
                     }
+
+                    Walking();
 
                     break;
 
@@ -245,21 +245,26 @@ public class NannyModel : HomeObject
                     //List<FeedingPostModel> feed_posts = HomeManager.m_Instance.GetFeedingPosts();
                     //if (feed_posts.Count == 0)
                     //    return false;
-                    GetPath(m_TargetBaby.m_HomeObjectView.transform.position);
 
                     // m_FeedingPhase = FeedingPhase.MOVE;
                     m_CurrentConcreteAction = ConcreteAction.WALKING;
 
                     // m_ActionChanged = true;
 
-                //    break;
-                //case FeedingPhase.MOVE_TO_BABY:
+                    //    break;
+                    //case FeedingPhase.MOVE_TO_BABY:
                     // 3. Move to feeding post
 
                     //:TODO: Check collision with baby as stop walking condition
 
+                    GetPath(m_TargetBaby.m_HomeObjectView.transform.position);
+                    // SetTarget(m_TargetBaby.m_HomeObjectView.transform.position);
+
                     if (!Walking(1f))
                     {
+
+                        // SetTarget(m_TargetBaby.m_HomeObjectView.transform.position);
+
                         // pick the babe immediately so it does escape
                         PickUpBaby();
 
@@ -279,10 +284,11 @@ public class NannyModel : HomeObject
 
                     m_TargetFeedingPost = feed_posts[0].m_HomeObjectView.gameObject;
 
-                    GetPath(feed_posts[0].GetPosition());
-
                     m_FeedingPhase = FeedingPhase.MOVE_FEEDINGCHAIR;
                     m_CurrentConcreteAction = ConcreteAction.WALKING;
+
+                    GetPath(feed_posts[0].GetPosition());
+                    // SetTarget(feed_posts[0].GetPosition());
 
                     break;
                 case FeedingPhase.MOVE_FEEDINGCHAIR:
