@@ -31,5 +31,6 @@ public class Actionbar : MonoBehaviour
     {
         //Disable every view here
         BuildView.DisableView();
+        buildViewEnabled = false;
     }
 }
