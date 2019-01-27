@@ -8,6 +8,9 @@ using UnityEngine.Tilemaps;
 
 public class ConstructionController : Singleton<ConstructionController>
 {
+    // Log object positions and rotations
+    // String log = "";
+
     [Serializable]
     public class EditorConstructable
     {
@@ -71,6 +74,7 @@ public class ConstructionController : Singleton<ConstructionController>
         MyGrid = MyTilemap.GetComponentInParent<Grid>();
         _myCamera = Camera.main;
         InitialiseDictionary();
+        InitHouse();
     }
 
     private void InitialiseDictionary()
@@ -80,6 +84,97 @@ public class ConstructionController : Singleton<ConstructionController>
             if(editorConstructable.Prefab != null)
                 _constructablesDictionary.Add(editorConstructable.Constructables.ToString(), editorConstructable.Prefab);
         }
+    }
+
+    private void InitHouse()
+    {
+        GameObject wall = _constructablesDictionary[Constructables.wall_thin.ToString()];
+
+        GetNewObject(wall, new Vector3(-7.0f, 0.0f, -1.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(-7.0f, 0.0f, 1.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(-7.0f, 0.0f, 3.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(-7.0f, 0.0f, 5.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(-5.0f, 0.0f, 5.0f), new Quaternion(0.0f, -0.7f, 0.0f, 0.7f));
+        GetNewObject(wall, new Vector3(-3.0f, 0.0f, 5.0f), new Quaternion(0.0f, -0.7f, 0.0f, 0.7f));
+        GetNewObject(wall, new Vector3(-1.0f, 0.0f, 5.0f), new Quaternion(0.0f, -0.7f, 0.0f, 0.7f));
+        GetNewObject(wall, new Vector3(1.0f, 0.0f, 5.0f), new Quaternion(0.0f, -0.7f, 0.0f, 0.7f));
+        GetNewObject(wall, new Vector3(3.0f, 0.0f, 5.0f), new Quaternion(0.0f, -0.7f, 0.0f, 0.7f));
+        GetNewObject(wall, new Vector3(5.0f, 0.0f, 5.0f), new Quaternion(0.0f, -1.0f, 0.0f, 0.0f));
+        GetNewObject(wall, new Vector3(5.0f, 0.0f, 3.0f), new Quaternion(0.0f, -1.0f, 0.0f, 0.0f));
+        GetNewObject(wall, new Vector3(5.0f, 0.0f, 1.0f), new Quaternion(0.0f, -1.0f, 0.0f, 0.0f));
+        GetNewObject(wall, new Vector3(5.0f, 0.0f, -1.0f), new Quaternion(0.0f, -1.0f, 0.0f, 0.0f));
+        GetNewObject(wall, new Vector3(5.0f, 0.0f, -5.0f), new Quaternion(0.0f, -1.0f, 0.0f, 0.0f));
+        GetNewObject(wall, new Vector3(3.0f, 0.0f, -5.0f), new Quaternion(0.0f, -0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(1.0f, 0.0f, -5.0f), new Quaternion(0.0f, -0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(-1.0f, 0.0f, -5.0f), new Quaternion(0.0f, -0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(-3.0f, 0.0f, -5.0f), new Quaternion(0.0f, -0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(-5.0f, 0.0f, -5.0f), new Quaternion(0.0f, -0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(-7.0f, 0.0f, -5.0f), new Quaternion(0.0f, 0.0f, 0.0f, -1.0f));
+        GetNewObject(wall, new Vector3(-7.0f, 0.0f, -3.0f), new Quaternion(0.0f, 0.0f, 0.0f, -1.0f));
+        GetNewObject(wall, new Vector3(5.0f, 0.0f, -5.0f), new Quaternion(0.0f, 0.7f, 0.0f, 0.7f));
+        GetNewObject(wall, new Vector3(7.0f, 0.0f, -5.0f), new Quaternion(0.0f, 0.7f, 0.0f, 0.7f));
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, -5.0f), new Quaternion(0.0f, 0.7f, 0.0f, 0.7f));
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, -5.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, -3.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, -1.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, 1.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, 3.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, 5.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(5.0f, 0.0f, 5.0f), new Quaternion(0.0f, -0.7f, 0.0f, 0.7f));
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, 5.0f), new Quaternion(0.0f, -0.7f, 0.0f, 0.7f));
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, 7.0f), new Quaternion(0.0f, 0.0f, 0.0f, -1.0f));
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, 9.0f), new Quaternion(0.0f, 0.0f, 0.0f, -1.0f));
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, 13.0f), new Quaternion(0.0f, 0.0f, 0.0f, -1.0f));
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, 13.0f), new Quaternion(0.0f, 0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(7.0f, 0.0f, 13.0f), new Quaternion(0.0f, 0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(5.0f, 0.0f, 13.0f), new Quaternion(0.0f, 0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(3.0f, 0.0f, 13.0f), new Quaternion(0.0f, 0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(3.0f, 0.0f, 13.0f), new Quaternion(0.0f, 1.0f, 0.0f, 0.0f));
+        GetNewObject(wall, new Vector3(3.0f, 0.0f, 7.0f), new Quaternion(0.0f, 1.0f, 0.0f, 0.0f));
+
+        GetNewObject(wall, new Vector3(-7.0f, 0.0f, 11.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f)); 
+        GetNewObject(wall, new Vector3(9.0f, 0.0f, 11.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+
+        GetNewObject(wall, new Vector3(1.0f, 0.0f, 13.0f), new Quaternion(0.0f, 0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(-1.0f, 0.0f, 13.0f), new Quaternion(0.0f, 0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(-3.0f, 0.0f, 13.0f), new Quaternion(0.0f, 0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(-5.0f, 0.0f, 13.0f), new Quaternion(0.0f, 0.7f, 0.0f, -0.7f));
+        GetNewObject(wall, new Vector3(-7.0f, 0.0f, 7.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(-7.0f, 0.0f, 9.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(-7.0f, 0.0f, 13.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(wall, new Vector3(-7.0f, 0.0f, 1.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+
+        GameObject oven = _constructablesDictionary[Constructables.obj_oven.ToString()];
+        GameObject dishwasher = _constructablesDictionary[Constructables.obj_dishwasher.ToString()];
+        GameObject fridge = _constructablesDictionary[Constructables.obj_fridge.ToString()];
+        GameObject chair = _constructablesDictionary[Constructables.obj_chair.ToString()];
+        GameObject chairNormal = _constructablesDictionary[Constructables.obj_chair_normal.ToString()];
+        GameObject cradle = _constructablesDictionary[Constructables.obj_cradle.ToString()];
+        GameObject bed = _constructablesDictionary[Constructables.obj_bed_2x2.ToString()];
+
+        GetNewObject(oven, new Vector3(-3.0f, 0.0f, 5.0f), new Quaternion(0.0f, -1.0f, 0.0f, 0.0f));
+        GetNewObject(dishwasher, new Vector3(-5.0f, 0.0f, 5.0f), new Quaternion(0.0f, -1.0f, 0.0f, 0.0f));
+        GetNewObject(dishwasher, new Vector3(-1.0f, 0.0f, 5.0f), new Quaternion(0.0f, -1.0f, 0.0f, 0.0f));
+        GetNewObject(dishwasher, new Vector3(1.0f, 0.0f, 5.0f), new Quaternion(0.0f, -1.0f, 0.0f, 0.0f));
+        GetNewObject(fridge, new Vector3(-5.0f, 0.0f, 1.0f), new Quaternion(0.0f, -0.7f, 0.0f, -0.7f));
+        GetNewObject(chair, new Vector3(-3.0f, 0.0f, -3.0f), new Quaternion(0.0f, 0.7f, 0.0f, 0.7f));
+        GetNewObject(chair, new Vector3(-3.0f, 0.0f, -5.0f), new Quaternion(0.0f, -0.7f, 0.0f, -0.7f));
+        GetNewObject(chairNormal, new Vector3(1.0f, 0.0f, -3.0f), new Quaternion(0.0f, -0.7f, 0.0f, 0.7f));
+        GetNewObject(chairNormal, new Vector3(1.0f, 0.0f, -5.0f), new Quaternion(0.0f, -0.7f, 0.0f, 0.7f));
+        GetNewObject(dishwasher, new Vector3(-1.0f, 0.0f, -3.0f), new Quaternion(0.0f, 0.0f, 0.0f, 1.0f));
+        GetNewObject(dishwasher, new Vector3(-1.0f, 0.0f, -5.0f), new Quaternion(0.0f, -1.0f, 0.0f, 0.0f));
+        GetNewObject(cradle, new Vector3(5.0f, 0.0f, -1.0f), new Quaternion(0.0f, -0.7f, 0.0f, -0.7f));
+        GetNewObject(cradle, new Vector3(5.0f, 0.0f, 1.0f), new Quaternion(0.0f, -0.7f, 0.0f, -0.7f));
+        GetNewObject(bed, new Vector3(7.0f, 0.0f, 11.0f), new Quaternion(0.0f, -1.0f, 0.0f, 0.0f));
+
+        GameObject toiletSeat = _constructablesDictionary[Constructables.obj_toilet_seat.ToString()];
+        GameObject toiletSink = _constructablesDictionary[Constructables.obj_toilet_sink.ToString()];
+        GameObject pot = _constructablesDictionary[Constructables.obj_pot.ToString()];
+
+        GetNewObject(toiletSeat, new Vector3(-5.0f, 0.0f, 7.0f), new Quaternion(0.0f, -0.7f, 0.0f, -0.7f));
+        GetNewObject(toiletSink, new Vector3(-1.0f, 0.0f, 7.0f), new Quaternion(0.0f, 0.0f, 0.0f, -1.0f));
+        GetNewObject(pot, new Vector3(-5.0f, 0.0f, 13.0f), new Quaternion(0.0f, 1.0f, 0.0f, 0.0f));
+        GetNewObject(pot, new Vector3(-3.0f, 0.0f, 13.0f), new Quaternion(0.0f, 1.0f, 0.0f, 0.0f));
     }
 
     public void StartBuilding(Constructables constructable)
@@ -166,6 +261,12 @@ public class ConstructionController : Singleton<ConstructionController>
                     });
                 }
 
+                // Log element position to help initializing objects
+                //
+                // String logEntry = String.Format(("{0}, {1}, {2} \n"), objectToBuild.name, worldPosition, rotation);
+                // log += logEntry;
+                // Debug.Log(log);
+
                 ghostObject = GetNewObject(objectToBuild, worldPosition, rotation);
             }
             
@@ -173,7 +274,6 @@ public class ConstructionController : Singleton<ConstructionController>
         }
         
         if (ghostObject != null) Destroy(ghostObject.gameObject);
-        
         yield return null;
     }
 
