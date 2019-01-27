@@ -46,7 +46,8 @@ public class NannyModel : HomeObject
                 break;
             case Tasks.IDLE:
                 //:TODO: add here moving away from previous action post
-                m_CurrentTask = Tasks.NONE;
+                NannyIdle();
+
                 break;
             case Tasks.NONE:
 
@@ -114,6 +115,94 @@ public class NannyModel : HomeObject
                 break;
         }
     }
+
+    enum IdlePhase { GETPATH, MOVE, FINISH, CANCEL };
+    IdlePhase m_IdlePhasePhase = IdlePhase.GETPATH;
+
+    private bool NannyIdle()
+    {
+
+    /// <summary>
+    ///     Description: Go to feeding place and eat
+    ///     Triggers: Hunger
+    ///     Concrete actions: StandUp, Walking, Eating, Pushing, Bullying
+    /// </summary>
+        // :NOTE: that actions over several frames must be cancellable
+        // :NOTE: always reset the action phase params both in completion and cancellation
+
+        if (CancelAction())
+        {
+            ResetCancel();
+            m_IdlePhasePhase = IdlePhase.CANCEL;
+        }
+
+        // Throw exception if some phase gets into dead end
+        try
+        {
+            switch (m_IdlePhasePhase)
+            {
+                case IdlePhase.CANCEL:
+                    throw new Exception("Eat canceled");
+
+                case IdlePhase.GETPATH:
+
+                    Vector3 low_left = new Vector3(0, 0, 0), high_top = new Vector3(0, 0, 0);
+
+                    HomeManager.m_Instance.GetBounds(ref low_left, ref high_top);
+
+                    float x = UnityEngine.Random.Range(low_left.x, high_top.x);
+                    float z = UnityEngine.Random.Range(low_left.z, high_top.z);
+                    float y = 0.5f;
+
+                    GetPath(new Vector3(x, y, z)); // feed_posts[0].GetPosition());
+
+                    m_IdlePhasePhase = IdlePhase.MOVE;
+                    m_CurrentConcreteAction = ConcreteAction.WALKING;
+
+                    break;
+                case IdlePhase.MOVE:
+
+                    Walking();
+
+                    m_TimeLapsed += GameManager.m_Instance.m_GameDeltaTime;
+
+                    if (m_TimeLapsed > 5f)
+                    {
+                        m_TimeLapsed = 0f;
+                        m_IdlePhasePhase = IdlePhase.FINISH;
+                        m_CurrentConcreteAction = ConcreteAction.WALKING;
+                    }
+
+                    break;
+
+                case IdlePhase.FINISH:
+                    // 5. Finish
+
+                    if (!ToIdling())
+                    {
+                        m_IdlePhasePhase = IdlePhase.GETPATH;
+                        m_CurrentTask = Tasks.NONE;
+                        m_CurrentConcreteAction = ConcreteAction.STANDING;
+
+                        return true;
+                    }
+
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            //Ensure that cow always ends up in a stable state, i.e. idling while standing or lying
+            m_IdlePhasePhase = IdlePhase.FINISH;
+            m_CurrentConcreteAction = ConcreteAction.TO_IDLING;
+        }
+
+        // Debug.Log("EATING");
+
+        return false;
+    }
+
+    float m_TimeLapsed=0;
 
     BabyModel m_TargetBaby;
 

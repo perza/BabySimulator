@@ -34,8 +34,8 @@ public abstract class HomeObject
         m_ObjectName = obj_name;
 
         m_Camera = Camera.main;
-        m_CurrentPath = new NavMeshPath();
 
+        m_CurrentPath = new NavMeshPath();
     }
 
     // Update is called once per frame
@@ -185,6 +185,8 @@ public abstract class HomeObject
         // {
         // Ray ray = m_Camera.ScreenPointToRay(target);
         // RaycastHit hit;
+
+        m_CurrentPath = new NavMeshPath();
 
         // if (Physics.Raycast(ray, out hit))
         NavMesh.CalculatePath(m_ViewObject.transform.position, target, NavMesh.AllAreas, m_CurrentPath);

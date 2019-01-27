@@ -835,13 +835,15 @@ public class BabyModel : HomeObject
     float InferDrink() { return 0f; }
     float InferEat()
     {
-        return 1f;
+        // return 1f;
 
         return m_Hungry.GetState();
     }
     float InferEscape() { return 0f; }
     float InferExplore()
     {
+        return 1f;
+
         // If nothing to complain, choose a random location and move there
         if (m_Happy.GetState() < 0.5f &&
             m_Eager.GetState() < 0.5f &&

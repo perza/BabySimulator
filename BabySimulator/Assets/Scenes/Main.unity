@@ -97,7 +97,7 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 0.5
+    agentRadius: 1
     agentHeight: 2
     agentSlope: 45
     agentClimb: 0.4
@@ -105,7 +105,7 @@ NavMeshSettings:
     maxJumpAcrossDistance: 0
     minRegionArea: 2
     manualCellSize: 0
-    cellSize: 0.16666667
+    cellSize: 0.33333334
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
@@ -819,6 +819,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 42.539, y: -41.664, z: 0}
+--- !u!1 &1324815170 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1694857547177246388, guid: 5b6dd5308418fc743bb37bd07644f0e1,
+    type: 3}
+  m_PrefabInstance: {fileID: 1694857548247298842}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1324815173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324815170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 570a84f7d6921d649a80318a9372f034, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mSoundClips: []
+  mMusicClips:
+  - {fileID: 8300000, guid: 3686e5bb2d3bd6e49887f08a511b999d, type: 3}
+  mSoundVolumes: []
+  mStartImmediately: 1
+  mFadeDelay: 2
 --- !u!1 &1694476375
 GameObject:
   m_ObjectHideFlags: 0
@@ -1180,7 +1204,7 @@ PrefabInstance:
     - target: {fileID: 1922176137, guid: a74851a095a57184bbafe9d1fd2035f1, type: 3}
       propertyPath: m_NavMeshData
       value: 
-      objectReference: {fileID: 23800000, guid: 4c74bf28d78e0274cbf3435a014f385a,
+      objectReference: {fileID: 23800000, guid: a1ec42550399f2942820b6faf9dfbd96,
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a74851a095a57184bbafe9d1fd2035f1, type: 3}

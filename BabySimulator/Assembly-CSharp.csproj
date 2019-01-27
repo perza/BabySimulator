@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\FeedingChairView.cs" />
+    <Compile Include="Assets\Scripts\Common\AudioHandler.cs" />
     <Compile Include="Assets\Scripts\Common\PersistenEngineSingleton.cs" />
     <Compile Include="Assets\Scripts\Common\PersistentSceneSingleton.cs" />
     <Compile Include="Assets\Scripts\ConstructionController.cs" />
