@@ -32,6 +32,11 @@ public class GameManager : PersistentSceneSingleton<GameManager>
         return m_BabyManager.AddBaby(cow_view);
     }
 
+    public NannyModel AddNanny(GameObject cow_view)
+    {
+        return m_HomeManager.AddNanny(cow_view);
+    }
+
     public FeedingPostModel AddFeedingPost(GameObject feed_post)
     {
         return m_HomeManager.AddDynamicObject(feed_post);

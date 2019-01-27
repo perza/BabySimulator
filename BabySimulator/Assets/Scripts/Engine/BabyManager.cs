@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BabyManager : PersistentEngineSingleton<BabyManager>
 {
-    List<BabyModel> m_Babies;
+    public List<BabyModel> m_Babies;
 
     // Start is called before the first frame update
     public BabyManager()
@@ -31,10 +31,10 @@ public class BabyManager : PersistentEngineSingleton<BabyManager>
         }
     }
 
-    IEnumerator CleanBabyColliders (BabyModel baby)
+    public IEnumerator CleanBabyColliders (HomeObject ho)
     {
         yield return new WaitForSeconds(1);
 
-        baby.CleanColliders();
+        ho.CleanColliders();
     }
 }

@@ -19,6 +19,10 @@ public class HomeManager : PersistentEngineSingleton<HomeManager>
 
     public float m_MinX = -100f, m_MaxX = 100f, m_MinY = 0.5f, m_MaxY = 0.5f, m_MinZ = -100f, m_MaxZ = 100f;
 
+    List<NannyModel> m_Nannies;
+
+    // Start is called before the first frame update
+
     // Start is called before the first frame update
     public HomeManager()
     {
@@ -27,7 +31,25 @@ public class HomeManager : PersistentEngineSingleton<HomeManager>
         m_FeedingPostModels = new List<FeedingPostModel>();
 
         m_BarnClock = new Clock();
+
+        m_Nannies = new List<NannyModel>();
     }
+
+    public NannyModel AddNanny(GameObject nanny_view)
+    {
+        m_Nannies.Add(new NannyModel(nanny_view));
+
+        // nanny_view.GetComponent<HomeObjectView>().StartCoroutine(CleanNannyColliders(m_Nannies[m_Nannies.Count - 1]));
+
+        return m_Nannies[m_Nannies.Count - 1];
+    }
+
+    public IEnumerator CleanNannyColliders(HomeObject ho)
+    {
+        yield return new WaitForSeconds(1);
+        ho.CleanColliders();
+    }
+
 
     float time_since_view_clock_update = 0;
     Clock.Date barn_date;
@@ -39,6 +61,11 @@ public class HomeManager : PersistentEngineSingleton<HomeManager>
         foreach (HomeObject dynamic_barn_object in m_DynamicBarnObjects)
         {
             dynamic_barn_object.Update();
+        }
+
+        foreach (NannyModel nanny in m_Nannies)
+        {
+            nanny.Update();
         }
 
         m_BarnClock.Update();

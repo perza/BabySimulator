@@ -8,12 +8,6 @@ using UnityEngine.AI;
 public class BabyModel : HomeObject
 {
     // m_CowView is used as location storage, needed for navigation and collisions
-    public GameObject m_BabyView;
-    public HomeObjectView m_HomeObjectView;
-    public Rigidbody m_Rigidbody;
-
-    private Camera m_Camera;    // path finding
-    private NavMeshPath m_CurrentPath;   // path finding
 
     // Wellness - Physical conditions
     public Pain m_Pain;         // Cow is sudffering from pain due some physical condition
@@ -38,9 +32,6 @@ public class BabyModel : HomeObject
     public float m_Stomach = 0; // fill rate, 0=empty, 1=full
     float m_StomachBuffer = 0f; // cow eats first to buffer, then when either buffer full or eating interrupted, 
                                 // buffer is moved to stomach
-    float m_WalkingSpeed = 1.3f;  // 
-    float m_TurningSpeed = 1.3f;  // 
-    float m_BabyHeight = 0.5f;     // Pivotpoint from ground
 
     // list of all the wounds the cow is suffering
     // :TODO: add healing/dying based on the wounds
@@ -52,8 +43,39 @@ public class BabyModel : HomeObject
 
     static int m_CowHierachyPositions = 0; // static counter for cows is used as the initial cow position in herd hierarchy. Priority 0 is the herd leader.
     int m_CowHierarchyPosition = 0; // cow position in herd hierarchy
-    //:NOTE: CowManager holds list of all cows, and separate ref the herd leader
+                                    //:NOTE: CowManager holds list of all cows, and separate ref the herd leader
 
+    // Baby is carried by nurse
+    bool m_IsCarried = false;
+    public bool IsCarried
+    {
+        get
+        {
+            return m_IsCarried;
+        }
+        set
+        {
+            if (value)
+            {
+                m_IsCarried = true;
+                m_HomeObjectView.gameObject.GetComponentInChildren<BoxCollider>().enabled = false;
+                m_CancelAction = true;
+            }
+            else
+            {
+                m_HomeObjectView.gameObject.GetComponentInChildren<BoxCollider>().enabled = true;
+                m_IsCarried = false;
+            }
+        }
+    }
+
+    // Baby is targeted by nanny
+    public bool IsNannyTarget = false;
+
+    // These babies are prioritized to avoid deadlocks (i.e. action posts are reserved, and nannies can not get tasks completed)
+    // :NOTE: It is basically possible that nannies still get into deadlock, if they pick tasks, and action posts become filled.
+    // Nannies should be able to cancel tasks if they can not complete them
+    public bool NeedsReleaseFromActionPost = false;
 
     // List of action positions
     public bool InFeedingChair = false;
@@ -72,14 +94,13 @@ public class BabyModel : HomeObject
         EAT,
         SLEEP,
         EXPLORE,
+        DIAPER, // needs diaper change: stay still and cry
         PLAY,
         IDLE       // Lowest priority
     };
 
-    PrioritizedPrimaryAction m_CurrentPrimaryAction = PrioritizedPrimaryAction.IDLE;
+    public PrioritizedPrimaryAction m_CurrentPrimaryAction = PrioritizedPrimaryAction.IDLE;
     float[] m_PrimaryActionValues;
-
-    ConcreteAction m_CurrentConcreteAction = ConcreteAction.STANDING;
 
     // Current pose tells the starting position
     // We need to know these before starting any new animation, so that when starting walking,
@@ -92,21 +113,17 @@ public class BabyModel : HomeObject
     const float MAX_PRIO_BOOST = 0.5f;
 
     // Start is called before the first frame update
-    public BabyModel(GameObject cow_view) :  base ("BabyModel")
+    public BabyModel(GameObject baby_view) :  base (baby_view, "BabyModel")
     {
+        m_WalkingSpeed = 1.3f;
+        m_TurningSpeed = 1.3f;
+
         m_CowHierarchyPosition = m_CowHierachyPositions;
         m_CowHierachyPositions++;
 
         m_PrimaryActionValues = new float[Enum.GetNames(typeof(PrioritizedPrimaryAction)).Length];
 
         m_BoostPerLevel = MAX_PRIO_BOOST / m_PrimaryActionValues.Length;
-
-        m_BabyView = cow_view;
-        m_HomeObjectView = m_BabyView.GetComponent<HomeObjectView>();
-        m_Rigidbody = m_BabyView.GetComponent<Rigidbody>();
-
-        m_Camera = Camera.main;
-        m_CurrentPath = new NavMeshPath();
 
         GenerateConditions();
 
@@ -128,6 +145,24 @@ public class BabyModel : HomeObject
         // Update conditions
         UpdatePhysicalConditions();
         UpdateMentalConditions();
+
+        if (m_IsCarried)
+        {
+            // Not move anything when carried
+            // :TODO: The methods such as Eat or Sleep must be called directly 
+            // :NOTE: there is a pending cancel in place, which will cancel any
+            // Action that was interrupted by carrying begin.
+
+            if (InFeedingChair)
+            {
+                if (!Eating())
+                {
+                    NeedsReleaseFromActionPost = true;
+                }
+            }
+
+            return;
+        }
 
         if (m_ActionInterrupted)
         {
@@ -217,6 +252,7 @@ public class BabyModel : HomeObject
         m_PrimaryActionValues[(int)PrioritizedPrimaryAction.PLAY] = InferPlay();
         m_PrimaryActionValues[(int)PrioritizedPrimaryAction.IDLE] = InferIdle();
         m_PrimaryActionValues[(int)PrioritizedPrimaryAction.SLEEP] = InferSleep();
+        m_PrimaryActionValues[(int)PrioritizedPrimaryAction.SLEEP] = InferDiaper();
 
         int selected = 0;
 
@@ -268,6 +304,9 @@ public class BabyModel : HomeObject
                 break;
             case PrioritizedPrimaryAction.SLEEP:
                 Sleep();
+                break;
+            case PrioritizedPrimaryAction.DIAPER:
+                Diaper();
                 break;
         }
 
@@ -667,6 +706,11 @@ public class BabyModel : HomeObject
         // reduce tiredness to 0, then wake up in idle
     }
 
+    public void Diaper()
+    {
+        // reduce tiredness to 0, then wake up in idle
+    }
+
     /// <summary>
     /// Description: Die by starvation, sickness or wound.
     /// Triggers: Max(Hunger, Sick, Wound) = 1.
@@ -682,23 +726,11 @@ public class BabyModel : HomeObject
     public bool Idling()
     { return false; }
 
-    public bool ToIdling()
-    { return false; }
-
     public void Lying()
     { }
 
     public void Standing()
     { }
-
-    // We are interested in 2D distances only
-    float MagnitudeXZ(Vector3 a, Vector3 b)
-    {
-        float c = Mathf.Abs(a.x - b.x);
-        float d = Mathf.Abs(a.z - b.z);
-
-        return Mathf.Sqrt(c * c + d * d);
-    }
 
     bool m_CancelAction = false;
     void ResetCancel()
@@ -710,48 +742,6 @@ public class BabyModel : HomeObject
         return m_CancelAction;
     }
 
-    Vector3 m_CurrentTarget = Vector3.negativeInfinity;
-    int m_NextPathStep = 0;
-    float m_PrevDist = float.MaxValue;
-    public bool Walking()
-    {
-        if (m_CurrentTarget.Equals(Vector3.negativeInfinity))
-            m_CurrentTarget = m_CurrentPath.corners[m_NextPathStep];
-
-        // movement
-        float step = m_WalkingSpeed * GameManager.m_Instance.m_GameDeltaTime;
-        m_BabyView.transform.position = Vector3.MoveTowards(m_BabyView.transform.position, m_CurrentTarget, step);
-
-        // set rotation
-        Vector3 target_dir = m_CurrentTarget - m_BabyView.transform.position;
-        Vector3 new_dir = Vector3.RotateTowards(m_BabyView.transform.forward, target_dir, m_TurningSpeed * GameManager.m_Instance.m_GameDeltaTime, 0f);
-        m_BabyView.transform.rotation = Quaternion.LookRotation(new_dir);
-
-        float dist = MagnitudeXZ(m_BabyView.transform.position, m_CurrentTarget);
-
-        // are we there yet? 
-        if (dist < 0.1) // || dist > m_PrevDist)
-        {
-            m_Rigidbody.velocity = Vector3.zero;
-
-            m_PrevDist = float.MaxValue;
-            m_CurrentTarget = Vector3.negativeInfinity;
-
-            if (m_NextPathStep >= m_CurrentPath.corners.Length - 1)
-            {
-                // This was the last corner, we are finished
-                return false;
-            }
-
-            m_NextPathStep++;
-            return true;
-        }
-        else
-        {
-            m_PrevDist = dist;
-            return true;
-        }
-    }
 
     /// <summary>
     /// 
@@ -821,7 +811,7 @@ public class BabyModel : HomeObject
         if (!InFeedingChair)
             return true;
 
-        m_StomachBuffer += GameManager.m_Instance.m_GameDeltaTime / 1800f;
+        m_StomachBuffer += GameManager.m_Instance.m_GameDeltaTime / 600f * Clock.m_Instance.m_DayAcceleration;
 
         if (m_StomachBuffer >= 1f)
             return false;
@@ -845,13 +835,13 @@ public class BabyModel : HomeObject
     float InferDrink() { return 0f; }
     float InferEat()
     {
+        return 1f;
+
         return m_Hungry.GetState();
     }
     float InferEscape() { return 0f; }
     float InferExplore()
     {
-        return 1f;
-
         // If nothing to complain, choose a random location and move there
         if (m_Happy.GetState() < 0.5f &&
             m_Eager.GetState() < 0.5f &&
@@ -869,6 +859,7 @@ public class BabyModel : HomeObject
     }
     float InferIdle() { return 0f; }
     float InferSleep() { return 0f; }
+    float InferDiaper() { return 0f; }
     float InferPlay()
     {
         if (m_Happy.GetState() > 0.5f &&
@@ -885,52 +876,6 @@ public class BabyModel : HomeObject
 
         return 0f; }
 
-
-    void GetPath(Vector3 target)
-    {
-        // :TEST: Navigation 
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        // Ray ray = m_Camera.ScreenPointToRay(target);
-        // RaycastHit hit;
-
-        // if (Physics.Raycast(ray, out hit))
-        NavMesh.CalculatePath(m_BabyView.transform.position, target, NavMesh.AllAreas, m_CurrentPath);
-
-        // Adjust the path to current baby height
-        for (int i = 0; i < m_CurrentPath.corners.Length; i++)
-        {
-            m_CurrentPath.corners[i].Set(m_CurrentPath.corners[i].x, m_BabyHeight, m_CurrentPath.corners[i].z);
-        }
-
-        // }
-    }
-
-    //////////////////////////
-    /// COLLISION HANDLING ///
-    //////////////////////////
-
-    /// <summary>
-    /// Remove references to cow's own colliders from all lists.
-    /// </summary>
-    public void CleanColliders ()
-    {
-        Debug.Log("clean colliders");
-
-        GameObject go;
-        
-        int len = m_ContactObjects.Count - 1;
-
-        for (int i = len; i >= 0; i--)
-        {
-            go = m_ContactObjects[i];
-
-            if (ReferenceEquals(go, m_BabyView))
-            {
-                m_ContactObjects.Remove(go);
-            }
-        }
-    }
 
     internal float GetInjuryDepth()
     {

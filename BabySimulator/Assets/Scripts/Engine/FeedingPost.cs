@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class FeedingPostModel : HomeObject
 {
-    GameObject m_FeedingPostView;
-
     // Start is called before the first frame update
-    public FeedingPostModel(GameObject feed_view) : base ("FeedingPost")
+    public FeedingPostModel(GameObject feed_view) : base (feed_view, "FeedingPost")
     {
-        m_FeedingPostView = feed_view;
     }
 
     // Update is called once per frame
@@ -19,6 +16,6 @@ public class FeedingPostModel : HomeObject
 
     public Vector3 GetPosition ()
     {
-        return m_FeedingPostView.transform.position;
+        return m_ViewObject.transform.position;
     }
 }
