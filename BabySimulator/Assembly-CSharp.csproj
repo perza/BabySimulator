@@ -59,7 +59,6 @@
   <ItemGroup>
     <Compile Include="Assets\BasicIntegerSciptableObject.cs" />
     <Compile Include="Assets\FeedingChairView.cs" />
-    <Compile Include="Assets\ResourceHandler.cs" />
     <Compile Include="Assets\Scripts\Common\AudioHandler.cs" />
     <Compile Include="Assets\Scripts\Common\PersistenEngineSingleton.cs" />
     <Compile Include="Assets\Scripts\Common\PersistentSceneSingleton.cs" />
@@ -103,10 +102,12 @@
     <Compile Include="Assets\Scripts\NavMeshComponents\Scripts\NavMeshModifier.cs" />
     <Compile Include="Assets\Scripts\NavMeshComponents\Scripts\NavMeshModifierVolume.cs" />
     <Compile Include="Assets\Scripts\NavMeshComponents\Scripts\NavMeshSurface.cs" />
+    <Compile Include="Assets\Scripts\ResourceHandler.cs" />
     <Compile Include="Assets\Scripts\TestControllerScript.cs" />
     <Compile Include="Assets\Scripts\UI\Actionbar.cs" />
     <Compile Include="Assets\Scripts\UI\BuildView\BuildCategory.cs" />
     <Compile Include="Assets\Scripts\UI\BuildView\BuildView.cs" />
+    <Compile Include="Assets\Scripts\UI\FeelingDisplay.cs" />
     <Compile Include="Assets\Scripts\UI\GUIMain.cs" />
     <Compile Include="Assets\Scripts\UI\IView.cs" />
     <Compile Include="Assets\Scripts\UI\MenuItemHolder.cs" />
