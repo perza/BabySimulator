@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NannyView : HomeObjectView
+public class FeedingChairView : HomeObjectView
 {
+
     public GameObject m_BabyHolder;
     public GameObject m_Baby;
 
@@ -13,16 +14,18 @@ public class NannyView : HomeObjectView
         
     }
 
-    void Update()
+    // Update is called once per frame
+    new void Update()
     {
         if (null != m_Baby)
         {
             m_Baby.transform.position = m_BabyHolder.transform.position;
             m_Baby.transform.rotation = m_BabyHolder.transform.rotation;
         }
+
     }
 
-    public void CarryBaby (GameObject baby)
+    public void CarryBaby(GameObject baby)
     {
         m_Baby = baby;
         ((BabyModel)(m_Baby.GetComponent<HomeObjectView>().m_HomeObjectModel)).IsCarried = true;
@@ -33,8 +36,6 @@ public class NannyView : HomeObjectView
         if (null != target)
         {
             // :TODO: Drop baby to another holder like feeding chair
-            target.GetComponentInChildren<FeedingChairView>().CarryBaby(m_Baby);
-            m_Baby = null;
         }
         else
         {

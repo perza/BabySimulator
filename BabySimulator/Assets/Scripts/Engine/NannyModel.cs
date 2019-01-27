@@ -12,8 +12,8 @@ public class NannyModel : HomeObject
 
     public NannyModel(GameObject view) : base (view, "NannyModel")
     {
-        m_WalkingSpeed = 1.7f;
-        m_TurningSpeed = 1.7f;
+        m_WalkingSpeed = 2.6f;
+        m_TurningSpeed = 2.6f;
     }
 
     enum Tasks { NONE, FEED, SLEEP, DIAPER, HUG, REMOVE }
@@ -165,8 +165,8 @@ public class NannyModel : HomeObject
                         // pick the babe immediately so it does escape
                         PickUpBaby();
 
-                        m_FeedingPhase = FeedingPhase.FEED;
-                        m_CurrentConcreteAction = ConcreteAction.EATING;
+                        m_FeedingPhase = FeedingPhase.GETPATH_FEEDINGCHAIR;
+                        m_CurrentConcreteAction = ConcreteAction.WALKING;
                         m_ActionChanged = true;
                         // Debug.Log("START EATING");
                     }
@@ -174,8 +174,27 @@ public class NannyModel : HomeObject
                     break;
 
                 case FeedingPhase.GETPATH_FEEDINGCHAIR:
+
+                    List<FeedingPostModel> feed_posts = HomeManager.m_Instance.GetFeedingPosts();
+                    if (feed_posts.Count == 0)
+                        return false;
+
+                    m_TargetFeedingPost = feed_posts[0].m_HomeObjectView.gameObject;
+
+                    GetPath(feed_posts[0].GetPosition());
+
+                    m_FeedingPhase = FeedingPhase.MOVE_FEEDINGCHAIR;
+                    m_CurrentConcreteAction = ConcreteAction.WALKING;
+
                     break;
                 case FeedingPhase.MOVE_FEEDINGCHAIR:
+
+                    if (!Walking(1f))
+                    {
+                        m_FeedingPhase = FeedingPhase.FEED;
+                        m_CurrentConcreteAction = ConcreteAction.WALKING;
+                    }
+
                     break;
 
                 case FeedingPhase.FEED:
@@ -185,8 +204,6 @@ public class NannyModel : HomeObject
                     {
                         m_FeedingPhase = FeedingPhase.FINISH;
                         m_CurrentConcreteAction = ConcreteAction.TO_IDLING;
-                        m_ActionChanged = true;
-                        // Debug.Log("START FINISH");
                     }
 
                     break;

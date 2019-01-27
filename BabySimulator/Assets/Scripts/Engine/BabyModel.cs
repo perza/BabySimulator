@@ -55,8 +55,17 @@ public class BabyModel : HomeObject
         }
         set
         {
-            m_IsCarried = true;
-            m_CancelAction = true;
+            if (value)
+            {
+                m_IsCarried = true;
+                m_HomeObjectView.gameObject.GetComponentInChildren<BoxCollider>().enabled = false;
+                m_CancelAction = true;
+            }
+            else
+            {
+                m_HomeObjectView.gameObject.GetComponentInChildren<BoxCollider>().enabled = true;
+                m_IsCarried = false;
+            }
         }
     }
 
